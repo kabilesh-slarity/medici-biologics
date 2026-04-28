@@ -98,10 +98,10 @@ function MapFragment({ large, city }: { large?: boolean; city: string }) {
         </linearGradient>
       </defs>
       {lines.map((i) => {
-        const x1 = seed(i * 2) * 400;
-        const y1 = seed(i * 2 + 1) * 280;
-        const x2 = x1 + (seed(i * 3) - 0.5) * 220;
-        const y2 = y1 + (seed(i * 3 + 1) - 0.5) * 80;
+        const x1 = Math.round(seed(i * 2) * 400);
+        const y1 = Math.round(seed(i * 2 + 1) * 280);
+        const x2 = Math.round(x1 + (seed(i * 3) - 0.5) * 220);
+        const y2 = Math.round(y1 + (seed(i * 3 + 1) - 0.5) * 80);
         return (
           <line
             key={i}

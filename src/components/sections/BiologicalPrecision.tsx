@@ -62,15 +62,17 @@ export function BiologicalPrecision() {
   );
 }
 
-// Deterministic node + edge generation for SSR consistency
+// Deterministic node + edge generation for SSR consistency.
+// Values are rounded to integers to avoid floating-point precision
+// differences between Node.js and browser V8 causing hydration mismatches.
 function generateNodes() {
   const nodes: { x: number; y: number; r: number }[] = [];
   const seed = (n: number) => Math.abs(Math.sin(n * 12.9898) * 43758.5453) % 1;
   for (let i = 0; i < 36; i++) {
     nodes.push({
-      x: 60 + seed(i + 1) * 1080,
-      y: 40 + seed(i + 100) * 420,
-      r: 1 + seed(i + 200) * 2,
+      x: Math.round(60 + seed(i + 1) * 1080),
+      y: Math.round(40 + seed(i + 100) * 420),
+      r: Math.round((1 + seed(i + 200) * 2) * 10) / 10,
     });
   }
   return nodes;
