@@ -2,15 +2,15 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import {
   useSettings,
   isValidHex,
   normalizeHex,
-  DEFAULT_PALETTE_LIGHT,
   type FontChoice,
   type Palette,
 } from "@/lib/theme";
+import { THEME_PRESETS, getPreset, type ThemePreset } from "@/lib/themePresets";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/cn";
 
@@ -76,14 +76,14 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
             role="dialog"
             aria-modal="true"
             aria-label="Customize appearance"
-            className="fixed right-0 top-0 bottom-0 z-[61] w-full sm:w-[380px] bg-[var(--surface)] border-l border-[var(--border)] overflow-y-auto"
+            className="fixed right-0 top-0 bottom-0 z-[61] w-full sm:w-[400px] bg-[var(--surface)] border-l border-[var(--border)] overflow-y-auto"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-center justify-between px-6 h-16 border-b border-[var(--border)] sticky top-0 bg-[var(--surface)] z-10">
-              <h2 className="text-[15px] font-semibold tracking-[-0.01em]">Customize</h2>
+              <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Customize</h2>
               <button
                 onClick={onClose}
                 aria-label="Close settings"
@@ -94,7 +94,8 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
             </div>
 
             <div className="px-6 py-7 space-y-9">
-              <ThemeSection />
+              <ModeSection />
+              <PresetSection />
               <ColorSection />
               <FontSection />
               <ResetSection />
@@ -106,7 +107,7 @@ export function SettingsDrawer({ open, onClose }: { open: boolean; onClose: () =
   );
 }
 
-function ThemeSection() {
+function ModeSection() {
   const { theme, setTheme } = useTheme();
   const opts: { v: "light" | "dark"; label: string }[] = [
     { v: "light", label: "Light" },
@@ -114,7 +115,7 @@ function ThemeSection() {
   ];
   return (
     <section>
-      <h3 className="eyebrow mb-3">Appearance</h3>
+      <h3 className="eyebrow mb-3">Mode</h3>
       <div className="grid grid-cols-2 gap-1 p-1 bg-[var(--surface-elev)] rounded-full">
         {opts.map((o) => (
           <button
@@ -136,8 +137,77 @@ function ThemeSection() {
   );
 }
 
+function PresetSection() {
+  const { settings, setPreset } = useSettings();
+  return (
+    <section>
+      <h3 className="eyebrow mb-3">Theme</h3>
+      <div className="grid grid-cols-2 gap-2.5">
+        {THEME_PRESETS.map((p) => (
+          <PresetTile
+            key={p.id}
+            preset={p}
+            active={settings.presetId === p.id}
+            onClick={() => setPreset(p.id)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PresetTile({
+  preset,
+  active,
+  onClick,
+}: {
+  preset: ThemePreset;
+  active: boolean;
+  onClick: () => void;
+}) {
+  const swatch = preset.light;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "group relative rounded-[18px] border p-3 text-left transition-all overflow-hidden",
+        active
+          ? "border-[var(--ink)] shadow-[0_0_0_1px_var(--ink)]"
+          : "border-[var(--border)] hover:border-[var(--ink)]",
+      )}
+      style={{ backgroundColor: swatch.surface ?? "var(--surface)" }}
+    >
+      {/* Swatch strip */}
+      <div className="flex h-7 rounded-md overflow-hidden border border-[var(--border)] mb-2.5">
+        <span className="flex-1" style={{ backgroundColor: swatch.bg ?? "var(--bg)" }} />
+        <span className="flex-1" style={{ backgroundColor: swatch.primary }} />
+        <span className="flex-1" style={{ backgroundColor: swatch.accent }} />
+        <span className="flex-1" style={{ backgroundColor: swatch.sage }} />
+      </div>
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className="text-[13px] font-semibold"
+          style={{ color: swatch.ink ?? "var(--ink)" }}
+        >
+          {preset.name}
+        </span>
+        {active && (
+          <span
+            className="inline-flex h-4 w-4 items-center justify-center rounded-full"
+            style={{ backgroundColor: swatch.primary, color: "#fff" }}
+          >
+            <Check className="h-2.5 w-2.5" strokeWidth={3} />
+          </span>
+        )}
+      </div>
+    </button>
+  );
+}
+
 function ColorSection() {
-  const { settings, setPalette } = useSettings();
+  const { effectivePalette, setPalette } = useSettings();
   const rows: { key: keyof Palette; label: string }[] = [
     { key: "primary", label: "Primary" },
     { key: "accent", label: "Accent" },
@@ -145,13 +215,13 @@ function ColorSection() {
   ];
   return (
     <section>
-      <h3 className="eyebrow mb-3">Color</h3>
-      <div className="space-y-4">
+      <h3 className="eyebrow mb-3">Customize</h3>
+      <div className="space-y-3">
         {rows.map((r) => (
           <ColorRow
             key={r.key}
             label={r.label}
-            value={settings.palette[r.key]}
+            value={effectivePalette[r.key]}
             onChange={(v) => setPalette({ [r.key]: v } as Partial<Palette>)}
           />
         ))}
@@ -189,7 +259,7 @@ function ColorRow({
           if (isValidHex(v)) onChange(normalizeHex(v));
           else onChange(v);
         }}
-        className="w-[90px] h-9 px-3 text-[12px] tabular bg-[var(--surface-elev)] border border-[var(--border)] rounded-md focus:outline-none focus:border-[var(--primary)]"
+        className="w-[92px] h-9 px-3 text-[12px] tabular bg-[var(--surface-elev)] border border-[var(--border)] rounded-md focus:outline-none focus:border-[var(--primary)] text-ink"
       />
     </div>
   );
@@ -226,17 +296,17 @@ function FontSection() {
 }
 
 function ResetSection() {
-  const { reset } = useSettings();
+  const { resetToPreset, preset } = useSettings();
   return (
     <section className="pt-6 border-t border-[var(--border)]">
       <button
-        onClick={reset}
+        onClick={resetToPreset}
         className="text-[13px] text-ink-muted hover:text-ink underline-offset-4 hover:underline"
       >
-        Reset to defaults
+        Reset to {preset.name} defaults
       </button>
-      <p className="mt-2 text-[12px] text-ink-muted">
-        Defaults: forest ink {DEFAULT_PALETTE_LIGHT.primary.toUpperCase()} primary, aged bronze accent.
+      <p className="mt-2 text-[12px] text-ink-soft">
+        Clears your custom color overrides for the current theme.
       </p>
     </section>
   );

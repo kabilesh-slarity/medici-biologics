@@ -10,14 +10,14 @@ export const site = {
       { label: "Founding", href: "#founding" },
       { label: "Locations", href: "#on-site" },
     ],
-    primaryCta: { label: "Become a Founding Member", href: "#founding" },
+    primaryCta: { label: "Become a Founding Member", href: "/start" },
   },
 
   hero: {
     eyebrow: "Peptide Science + AI",
     headline: "Your protocol, written by your biology.",
     sub: "Upload bloodwork. Dr. Gabi reads it, designs your peptide protocol, and a licensed physician approves every order before it ships.",
-    cta: { label: "Start your protocol", href: "#founding" },
+    cta: { label: "Start your protocol", href: "/start" },
     secondary: { label: "How it works", href: "#process" },
     flow: {
       input: ["Bloodwork", "Goals", "Symptoms"],
@@ -142,6 +142,7 @@ export const site = {
         { label: "Priority physician access", body: "Direct routing to a senior reviewer on every order." },
       ],
       cta: "Add to Bag, $228",
+      ctaHref: "/start",
       helper: "Order before 4pm Pacific for same-day physician review.",
     },
     scarcity: { claimed: 5, total: 500 },

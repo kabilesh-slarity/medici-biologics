@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Check, Lock, ShieldCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { site } from "@/content/site";
@@ -82,12 +83,12 @@ export function FoundingMember() {
                 </div>
 
                 <div className="mt-auto pt-8">
-                  <button
-                    type="button"
-                    className="w-full h-12 rounded-full bg-[var(--ink)] text-[var(--bg)] text-[15px] font-medium hover:scale-[1.01] active:scale-[0.99] transition-transform"
+                  <Link
+                    href={plan.ctaHref}
+                    className="w-full h-12 inline-flex items-center justify-center rounded-full bg-[var(--ink)] text-[var(--bg)] text-[15px] font-medium hover:scale-[1.01] active:scale-[0.99] transition-transform"
                   >
                     {plan.cta}
-                  </button>
+                  </Link>
                   <p className="mt-3 text-center text-[12px] text-ink-muted">{plan.helper}</p>
                 </div>
               </div>

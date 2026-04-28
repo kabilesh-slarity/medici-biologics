@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Medici Biologics** landing + onboarding experience. AI + peptide science platform. Conversion-focused premium marketing site that doubles as the start of the product flow.
+**Medici Biologics** end-to-end product experience. AI + peptide science platform. The landing page, onboarding flow, payment, and member dashboard are one continuous experience that share theme tokens, font, and atmosphere.
 
-Stack: Next.js 15 (App Router) + TypeScript + Tailwind v3 + Framer Motion + next-themes + Lucide. Inter as the only font family (mandate, not default).
+Stack: Next.js 15 (App Router) + TypeScript + Tailwind v3 + Framer Motion + next-themes + Lucide. Inter as the only font family (mandate, not default). UI-only mocks (no backend).
 
 ## Commands
 
@@ -21,30 +21,81 @@ Single-file type-check during edits: rely on `npm run build` (type errors surfac
 
 ## Architecture
 
-Single composed route ([src/app/page.tsx](src/app/page.tsx)). Each section is its own component under [src/components/sections/](src/components/sections/). All copy lives in [src/content/site.ts](src/content/site.ts) — single source of truth. Em/en dashes are scrubbed (`grep -E "—|–" src/content/site.ts` should return empty).
+Three layouts, one shared theme system:
+
+- `/` — landing page ([src/app/page.tsx](src/app/page.tsx)). Marketing chrome.
+- `/start/*` — 5-step guided onboarding (phone → verify → profile → consents → payment → welcome). Minimal chrome (logo + progress rail + theme gear).
+- `/app/*` — member dashboard (Home / Chat / Plan / Records / Settings). Left rail + topbar.
+
+All copy lives in [src/content/site.ts](src/content/site.ts). Em/en dashes are scrubbed (`grep -E "—|–" src/content/site.ts` should return empty).
 
 ```
 src/
-  app/layout.tsx          Inter + Inter Tight via next/font, ThemeProvider, no-FOUC inline script
-  app/globals.css         CSS vars (light + dark), tile-canvas helpers, grain texture, focus rings
-  app/page.tsx            Composes header → 9 sections → footer
+  app/
+    layout.tsx                ThemeProvider, FOUC inline script (applies preset surfaces synchronously)
+    globals.css               CSS vars (light + dark), tile-canvas helpers, grain, focus rings
+    page.tsx                  Landing (composes header → 9 sections → footer)
+    start/
+      layout.tsx              OnboardingProvider wrapper
+      page.tsx                Step 1 — phone
+      verify/page.tsx         Step 2 — OTP (auto-advance, paste support, returning-user → /app)
+      profile/page.tsx        Step 3 — name / email / DOB segmented input
+      consents/page.tsx       Step 4 — HIPAA / telehealth / ToS with inline disclosure
+      payment/page.tsx        Step 5 — Stripe-style mock checkout
+      welcome/page.tsx        Success celebration → auto-redirect to /app
+    app/
+      layout.tsx              SideRail + RequireSession gate
+      page.tsx                Home (greeting, protocol summary, next steps, ask Gabi, recent records)
+      chat/page.tsx           Chat with Dr. Gabi (history rail, suggested prompts, save messages)
+      plan/page.tsx           Treatment Plan (hero card, schedule timeline, physician note)
+      records/page.tsx        Bloodwork / Reports / Documents (drag-drop upload, grid + timeline view)
+      settings/page.tsx       Profile, Subscription, Billing, Privacy, Appearance (presets), Sign out
   components/
-    Providers.tsx         next-themes ThemeProvider wrapping SettingsProvider
-    layout/SiteHeader     Sticky, scroll-aware, gear icon opens drawer
-    layout/SiteFooter
-    sections/             Hero (with ProcessFlow), Problem, BetterWay, MeetDrGabi, DrGabiHub,
-                          Process, BiologicalPrecision, FoundingMember, OnSite
-    settings/SettingsDrawer   Theme + 3 color pickers (hex + HSL via native picker) + font selector + reset
-    motion/Reveal             Scroll-triggered fade-up; respects prefers-reduced-motion
-    motion/CountUp            IntersectionObserver-driven number animation
-    ui/Button                 Primary/secondary/ghost variants, pill shape
-    ui/ImageUpload            Drag-and-drop image upload, persists data URL in localStorage("medici.image.<key>")
+    Providers.tsx             ThemeProvider → SettingsProvider → SessionProvider
+    layout/SiteHeader, SiteFooter
+    sections/                 9 landing sections (unchanged)
+    onboarding/
+      OnboardingShell         Shared chrome wrapper (logo + ProgressRail + theme gear)
+      ProgressRail            5-dot horizontal step tracker
+      StepShell               Center column — eyebrow + headline + subtitle + content + back link
+      Field                   Hairline-bordered input with label, error, prefix/suffix
+      ConsentCard             Title + summary + inline-disclosure full text + custom checkbox
+      OrderSummary            Reused on payment screen
+    dashboard/
+      SideRail                224px desktop rail / mobile bottom-tab; active route uses --primary edge bar
+      Topbar                  Page title + bell + theme gear (opens SettingsDrawer)
+      StatusPill              Pending / Approved / Active / Shipped — icon + label + tone
+      RequireSession          Gate that redirects to /start if no session
+    settings/SettingsDrawer   Theme presets grid + custom color pickers + font + reset
+    motion/Reveal, CountUp
+    ui/Button, ImageUpload
   lib/
-    theme.ts              SettingsProvider context. Writes palette to :root CSS vars in real time, persists to localStorage("medici.settings")
-    cn.ts                 clsx + tailwind-merge
-    a11y.ts               usePrefersReducedMotion hook
-  content/site.ts         All copy. Edit here, not in components.
+    theme.ts                  SettingsProvider. presetId + per-mode color overrides. Writes :root vars.
+    themePresets.ts           4 presets — Forest Ink, Clinical, Apothecary, Midnight (each light + dark)
+    session.ts                SessionProvider. localStorage('medici.session'). Mock-only.
+    onboarding.ts             OnboardingProvider. localStorage('medici.onboarding'). Format/validate helpers.
+    chat.ts                   ChatProvider. localStorage('medici.chat'). Mock Dr. Gabi reply generator.
+    records.ts                RecordsProvider. localStorage('medici.records'). File data URLs.
+    cn.ts, a11y.ts
+  content/site.ts             All landing copy. CTAs route to /start.
 ```
+
+### Flow
+
+```
+Landing  ──[CTA href="/start"]──►  /start (Phone)
+                                     ├─► /start/verify (OTP — returning user goes straight to /app)
+                                     ├─► /start/profile
+                                     ├─► /start/consents
+                                     ├─► /start/payment (sets session + clears onboarding state)
+                                     └─► /start/welcome ──[1.8s]──►  /app
+                                                                        ├─► /app/chat
+                                                                        ├─► /app/plan
+                                                                        ├─► /app/records
+                                                                        └─► /app/settings
+```
+
+State libs are localStorage-backed and survive refresh. Onboarding state is cleared on payment success; session remains until Sign out.
 
 ### Section composition order (current)
 
@@ -62,9 +113,18 @@ The order is deliberate — Apple-style alternating canvases (`tile-canvas`, `ti
 
 ### Theming model
 
-Two layers, both live-editable:
+Three layers, all live-editable:
 1. **Light/dark** via `next-themes` (`html.dark` class) reading from `localStorage("theme")`.
-2. **Brand palette** via `SettingsProvider` (`lib/theme.ts`). Writes `--primary`, `--primary-soft`, `--accent`, `--sage` directly to `documentElement.style`. Persisted in `localStorage("medici.settings")`. Hydration is FOUC-free via the inline script in `app/layout.tsx` (runs before React, reads localStorage, applies vars synchronously).
+2. **Theme preset** via `SettingsProvider` (`lib/theme.ts`) — one of 4 in [lib/themePresets.ts](src/lib/themePresets.ts): `forest-ink` (default), `clinical`, `apothecary`, `midnight`. Each preset defines BOTH light + dark surface colors. Selecting a preset writes 12 CSS vars: `--primary/--accent/--sage/--bg/--surface/--surface-elev/--surface-deep/--ink/--ink-muted/--ink-soft/--border` plus a derived `--primary-soft`.
+3. **Per-preset color overrides** — the user can nudge primary/accent/sage with the color picker; overrides are stored per-mode (light vs dark) so the same preset can have different custom tweaks in each. Reset clears overrides for the active mode only.
+
+Settings persisted in `localStorage("medici.settings")` schema:
+```ts
+{ presetId: string, overrides: { light: Partial<Palette>, dark: Partial<Palette> }, font: FontChoice }
+```
+A v1→v2 migrator handles old `{ palette, font }` payloads.
+
+Hydration is FOUC-free via the inline script in [app/layout.tsx](src/app/layout.tsx) — it knows all 4 presets and applies the full surface palette synchronously before React mounts.
 
 When adding a new color reference in components, **always use the CSS var** (`text-[var(--primary)]` or `bg-primary` via tailwind alias). Hardcoded hex defeats the runtime customization.
 
