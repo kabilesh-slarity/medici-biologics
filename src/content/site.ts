@@ -5,71 +5,88 @@ export const site = {
   brand: {
     name: "Medici Biologics",
     nav: [
-      { label: "The Problem", href: "#problem" },
+      { label: "How it works", href: "#process" },
       { label: "Dr. Gabi", href: "#dr-gabi" },
-      { label: "Process", href: "#process" },
       { label: "Founding", href: "#founding" },
+      { label: "Locations", href: "#on-site" },
     ],
     primaryCta: { label: "Become a Founding Member", href: "#founding" },
   },
 
   hero: {
     eyebrow: "Peptide Science + AI",
-    headline: "Know exactly what your body needs.",
-    sub: "Peptides are a fundamental shift in what medicine can do. When they are real, dosed correctly, and matched to your biology, the results are unlike anything else.",
-    cta: { label: "Discover Our Approach", href: "#problem" },
+    headline: "Your protocol, written by your biology.",
+    sub: "Upload bloodwork. Dr. Gabi reads it, designs your peptide protocol, and a licensed physician approves every order before it ships.",
+    cta: { label: "Start your protocol", href: "#founding" },
+    secondary: { label: "How it works", href: "#process" },
     flow: {
       input: ["Bloodwork", "Goals", "Symptoms"],
       analysis: "Dr. Gabi",
-      output: { title: "BPC-157", spec: "250 mcg, 2x daily" },
+      output: { title: "BPC-157", spec: "250 mcg, 2x daily", reviewer: "Dr. Jenkins, MD" },
     },
+    proof: [
+      { label: "Compounded in", value: "Licensed labs" },
+      { label: "Reviewed by", value: "Physicians" },
+      { label: "Shipped in", value: "48 hrs" },
+    ],
   },
 
   problem: {
     eyebrow: "The Problem",
-    stat: { value: 30, suffix: "%", label: "Of peptides on the market are mislabeled, mis-dosed, or contaminated." },
-    headline: "Impure peptides. Wrong protocols.",
-    lede: "Peptides are transformative when they are real and right for you. Most people have neither. Without knowing your biology, every protocol is a guess.",
+    headline: "Today's peptide market wasn't built for you.",
+    lede: "Most protocols are guesses. Most peptides are unverified. The result is wasted money, missed effects, and real risk.",
     cards: [
       {
-        title: "Grey Market",
-        subtitle: "No oversight",
-        body: "30% of peptides are mislabeled or contaminated. Self-prescribing offers zero oversight and zero accountability.",
+        title: "Grey market sourcing",
+        body: "Unregulated supply means mislabeled, mis-dosed, and contaminated peptides that never see a lab certificate.",
       },
       {
-        title: "Generic Advice",
-        subtitle: "Influencer protocols",
-        body: "Built around an influencer's body, not yours. Without your hormonal baseline and biology, it is just a guess.",
+        title: "Generic protocols",
+        body: "Built around an influencer's body, not yours. Without your hormonal baseline, every dose is a guess.",
       },
       {
-        title: "Current Experience",
-        subtitle: "Unclear choices",
-        body: "You're left choosing between expensive clinics or figuring it out yourself, without clarity.",
+        title: "No accountability",
+        body: "No physician review, no compounding standards, no follow-up. You're left to figure it out alone.",
       },
     ],
   },
 
   betterWay: {
     eyebrow: "A Better Way",
-    headline: "Built around you.",
-    body: "Your protocol is based on your biology, your goals, and your response, with medical review before anything is delivered.",
-  },
-
-  drGabi: {
-    eyebrow: "The Solution",
-    headline: "Meet Dr. Gabi.",
-    sub: "The most informed peptide clinician.",
-    body: "Dr. Gabi is Medici Biologics' AI trained on current peptide science, clinical best practice, and most importantly, your individual biology. She is not a chatbot.",
-    capabilities: [
-      "Reads and interprets your real bloodwork",
-      "Licensed physician reviews and approves every protocol",
-      "Precision Medicine compounds, tests, and delivers",
+    headline: "Built around the only baseline that matters: yours.",
+    body: "Your protocol starts from your bloodwork, your goals, and your response, and gets reviewed by a licensed physician before anything is delivered.",
+    pillars: [
+      { label: "Your biology", body: "Real bloodwork, not a quiz." },
+      { label: "Physician approved", body: "Licensed MD on every order." },
+      { label: "Lab certified", body: "Certificate of Analysis included." },
     ],
   },
 
+  drGabi: {
+    eyebrow: "Meet Dr. Gabi",
+    headline: "The most informed peptide clinician you've ever met.",
+    sub: "She is not a chatbot. She is a clinical intelligence trained on current peptide science, physician practice, and your individual biology.",
+    capabilities: [
+      {
+        title: "Reads your bloodwork",
+        body: "Interprets 50+ biomarkers, hormone panels, and metabolic signals against current peptide research.",
+      },
+      {
+        title: "Designs your protocol",
+        body: "Recommends peptide, dose, cadence, and stack based on what your body actually needs right now.",
+      },
+      {
+        title: "Routes to a physician",
+        body: "Every recommendation is reviewed and approved by a licensed MD before compounding begins.",
+      },
+    ],
+    biomarkers: ["WBC", "T3", "DHEA", "IGF-1", "TSH", "hsCRP", "ALT", "Vit D"],
+  },
+
   hub: {
-    eyebrow: "Dr. Gabi Hub",
-    headline: "Structure and clarity across your routine.",
+    eyebrow: "Live Hub",
+    headline: "Know what you're taking. Know why.",
+    sub: "Every protocol you receive is documented, sourced, and reviewable. No hidden ingredients. No guesswork.",
     preview: {
       title: "Protocol Approval",
       pending: "Pending Dr. Sarah Jenkins, MD",
@@ -79,60 +96,60 @@ export const site = {
     },
   },
 
-  manifesto1: "Know what you're taking. Know why.",
-
   process: {
     eyebrow: "The Process",
     headline: "From guesswork to precision in minutes.",
-    lede: "Every client interaction is built around one principle: make the right thing the easy thing. The journey feels effortless and completely safe.",
+    lede: "Make the right thing the easy thing. Every interaction is built so the path is effortless and unmistakably safe.",
     phases: [
       {
         phase: "01",
         title: "Text to start",
-        body: "Client texts a number. Receives a secure link via SMS. No app download required.",
+        body: "Text us. Get a secure link. No app download.",
       },
       {
         phase: "02",
-        title: "Intake & Biomarkers",
-        body: "Answer a short sequence of questions. Upload existing bloodwork if available. Dr. Gabi interprets.",
+        title: "Intake & biomarkers",
+        body: "Quick questions, optional bloodwork upload. Dr. Gabi interprets everything.",
       },
       {
         phase: "03",
-        title: "Physician Approval",
-        body: "Dr. Gabi recommends a precise protocol. A licensed physician reviews and approves via dashboard.",
+        title: "Physician approval",
+        body: "Dr. Gabi proposes a protocol. A licensed physician approves it via dashboard.",
       },
       {
         phase: "04",
-        title: "Compound & Delivery",
-        body: "Peptides delivered in 48 to 72 hours with a published Certificate of Analysis.",
+        title: "Compound & deliver",
+        body: "Peptides shipped in 48 to 72 hours with a Certificate of Analysis.",
       },
     ],
   },
 
-  manifesto2: "Precision, not guesswork.",
+  manifesto: "Precision, not guesswork.",
 
   founding: {
-    eyebrow: "Limited Availability",
+    eyebrow: "Limited to 500 members",
     headline: "Become a Founding Member.",
-    lede: "We are opening Medici Biologics to an exclusive cohort of 500 members. Lock in your rate forever and start your journey with industry leading peptide credits.",
-    scarcity: [
-      { label: "Claimed", value: "5%" },
-      { label: "Phase", value: "Launch" },
-      { label: "Rate", value: "Locked Forever" },
-    ],
+    lede: "We're opening Medici to a private cohort. Lock your rate forever, claim $500 in immediate peptide credits, and be among the first to start.",
     plan: {
       title: "Founding Member",
-      tagline: "Includes $500 in immediate peptide credits.",
       price: "$228",
-      cadence: "Pay 1 year upfront",
+      cadence: "first year, paid upfront",
+      lockedAt: "$19 / mo locked forever",
       perks: [
-        "Price permanently locked at $19/month",
-        "Receive $500 in peptide credits immediately",
-        "Name immortalized on the Founding Member Wall",
+        { label: "$500 in peptide credits", body: "Applied to your first protocol immediately." },
+        { label: "$19/month, forever", body: "Locked rate. Never increases. Never tiers up." },
+        { label: "Founding Member Wall", body: "Your name immortalized in the Medici archive." },
+        { label: "Priority physician access", body: "Direct routing to a senior reviewer on every order." },
       ],
       cta: "Add to Bag, $228",
-      helper: "Secure your allocation. Order before 4pm.",
+      helper: "Order before 4pm Pacific for same-day physician review.",
     },
+    scarcity: { claimed: 5, total: 500 },
+    badges: [
+      { label: "Compounded in licensed labs" },
+      { label: "Reviewed by licensed physicians" },
+      { label: "Certificate of Analysis on every order" },
+    ],
   },
 
   precision: {
@@ -144,28 +161,41 @@ export const site = {
   onSite: {
     eyebrow: "Medici On-Site",
     headline: "Care, in person.",
-    lede: "From bloodwork to protocol support, every step connects directly to your personalized plan, with the same precision you experience online.",
+    lede: "Walk into a Medici location for bloodwork, IV therapy, and protocol calibration. The same precision you experience online, in a private, physician-supervised space.",
     cities: [
       {
         city: "Austin",
         neighborhood: "South Congress",
         status: "Available now",
-        featured: true,
+        cta: "Book a visit",
+        imageKey: "city-austin",
       },
-      { city: "Nashville", neighborhood: "The Gulch", status: "Opening Q2" },
-      { city: "Dallas", neighborhood: "Knox Henderson", status: "Opening Q2" },
+      {
+        city: "Nashville",
+        neighborhood: "The Gulch",
+        status: "Opening Q2 2026",
+        cta: "Join the waitlist",
+        imageKey: "city-nashville",
+      },
+      {
+        city: "Dallas",
+        neighborhood: "Knox Henderson",
+        status: "Opening Q2 2026",
+        cta: "Join the waitlist",
+        imageKey: "city-dallas",
+      },
     ],
   },
 
   footer: {
     name: "Medici Biologics",
     disclaimer:
-      "The information provided on this website and by Dr. Gabi AI is for informational purposes only. Consult with a licensed physician before beginning any health protocol.",
+      "Information provided by Medici Biologics and Dr. Gabi AI is for educational purposes only. Consult a licensed physician before beginning any health protocol.",
     columns: [
       {
         label: "Platform",
         links: [
-          { label: "The Problem", href: "#problem" },
+          { label: "How it works", href: "#process" },
           { label: "Meet Dr. Gabi", href: "#dr-gabi" },
           { label: "On-Site Clinics", href: "#on-site" },
         ],

@@ -11,12 +11,22 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative pt-28 md:pt-36 pb-20 md:pb-28 overflow-hidden"
+      className="relative pt-28 md:pt-36 pb-16 md:pb-24 overflow-hidden"
       aria-label="Introduction"
     >
+      {/* Soft mesh atmosphere — Apple-style atmosphere via photography surrogate */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(60% 50% at 80% 20%, color-mix(in oklch, var(--sage) 16%, transparent), transparent 60%), radial-gradient(50% 40% at 10% 75%, color-mix(in oklch, var(--accent) 10%, transparent), transparent 65%)",
+        }}
+      />
+
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          <div className="lg:col-span-7">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="lg:col-span-6">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -30,7 +40,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.05 }}
-              className="mt-4 text-display !text-[34px] sm:!text-[40px] lg:!text-[44px] text-ink"
+              className="mt-5 text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.04] tracking-[-0.028em] font-semibold text-ink max-w-[14ch]"
             >
               {site.hero.headline}
             </motion.h1>
@@ -39,7 +49,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.12 }}
-              className="mt-6 max-w-prose text-[16px] leading-[1.6] text-ink-muted"
+              className="mt-6 max-w-[52ch] text-[17px] leading-[1.55] text-ink-muted"
             >
               {site.hero.sub}
             </motion.p>
@@ -48,24 +58,40 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.2 }}
-              className="mt-9 flex items-center gap-4"
+              className="mt-9 flex flex-wrap items-center gap-3"
             >
               <LinkButton href={site.hero.cta.href} size="lg" variant="primary">
                 {site.hero.cta.label}
                 <ArrowRight className="h-4 w-4" strokeWidth={2} />
               </LinkButton>
-              <div className="hidden sm:flex items-center gap-2 text-[12px] text-ink-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--sage)]" aria-hidden />
-                Reviewed by licensed physicians
-              </div>
+              <LinkButton href={site.hero.secondary.href} size="lg" variant="ghost">
+                {site.hero.secondary.label}
+              </LinkButton>
+            </motion.div>
+
+            {/* Trust strip — keeps text-density low, inline with spec */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease, delay: 0.32 }}
+              className="mt-14 grid grid-cols-3 gap-6 max-w-md"
+            >
+              {site.hero.proof.map((p) => (
+                <div key={p.label}>
+                  <div className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+                    {p.label}
+                  </div>
+                  <div className="mt-1 text-[14px] font-semibold text-ink">{p.value}</div>
+                </div>
+              ))}
             </motion.div>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease, delay: 0.25 }}
-            className="lg:col-span-5"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease, delay: 0.18 }}
+            className="lg:col-span-6"
           >
             <ProcessFlow />
           </motion.div>

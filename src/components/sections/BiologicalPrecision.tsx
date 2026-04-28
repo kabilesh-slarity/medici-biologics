@@ -52,10 +52,13 @@ export function BiologicalPrecision() {
       <div className="container mx-auto relative">
         <Reveal className="max-w-3xl">
           <div className="eyebrow !text-[var(--bg)] opacity-60">{eyebrow}</div>
-          <h2 id="precision-h" className="mt-4 text-section !text-[36px] sm:!text-[44px] !text-[var(--bg)]">
+          <h2
+            id="precision-h"
+            className="mt-4 text-[36px] sm:text-[48px] lg:text-[60px] leading-[1.04] tracking-[-0.028em] font-semibold !text-[var(--bg)]"
+          >
             {headline}
           </h2>
-          <p className="mt-6 text-[16px] leading-[1.6] opacity-75 max-w-prose">{body}</p>
+          <p className="mt-6 text-[17px] leading-[1.55] opacity-75 max-w-[55ch]">{body}</p>
         </Reveal>
       </div>
     </section>

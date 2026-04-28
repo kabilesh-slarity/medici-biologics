@@ -1,38 +1,43 @@
-import { MapPin } from "lucide-react";
+"use client";
+
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { site } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 export function OnSite() {
   const { eyebrow, headline, lede, cities } = site.onSite;
-  const featured = cities.find((c) => "featured" in c && c.featured) ?? cities[0];
-  const others = cities.filter((c) => c !== featured);
 
   return (
     <section
       id="on-site"
-      className="relative py-24 md:py-32 border-t border-[var(--border)]"
+      className="relative tile-canvas py-28 md:py-36"
       aria-labelledby="onsite-h"
     >
       <div className="container mx-auto">
-        <Reveal className="max-w-2xl">
+        <Reveal className="max-w-3xl">
           <div className="eyebrow">{eyebrow}</div>
-          <h2 id="onsite-h" className="mt-4 text-section !text-[28px] sm:!text-[32px] text-ink">
+          <h2
+            id="onsite-h"
+            className="mt-4 text-[32px] sm:text-[40px] lg:text-[44px] leading-[1.05] tracking-[-0.025em] font-semibold text-ink"
+          >
             {headline}
           </h2>
-          <p className="mt-5 text-[15px] leading-[1.6] text-ink-muted">{lede}</p>
+          <p className="mt-6 max-w-[58ch] text-[16px] leading-[1.55] text-ink-muted">{lede}</p>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-5">
-          <Reveal className="lg:col-span-7" delay={0.05}>
-            <CityCard city={featured.city} neighborhood={featured.neighborhood} status={featured.status} large />
-          </Reveal>
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
-            {others.map((c, i) => (
-              <Reveal key={c.city} delay={0.1 + i * 0.06}>
-                <CityCard city={c.city} neighborhood={c.neighborhood} status={c.status} />
-              </Reveal>
-            ))}
-          </div>
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cities.map((c, i) => (
+            <Reveal key={c.city} delay={0.06 * i}>
+              <CityCard
+                city={c.city}
+                neighborhood={c.neighborhood}
+                status={c.status}
+                cta={c.cta}
+                imageKey={c.imageKey}
+              />
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -43,79 +48,110 @@ function CityCard({
   city,
   neighborhood,
   status,
-  large,
+  cta,
+  imageKey,
 }: {
   city: string;
   neighborhood: string;
   status: string;
-  large?: boolean;
+  cta: string;
+  imageKey: string;
 }) {
   const isAvailable = status.toLowerCase().includes("available");
   return (
-    <article
-      className={`group relative rounded-3xl bg-[var(--surface)] border border-[var(--border)] overflow-hidden hover:border-[var(--ink)] transition-colors ${large ? "min-h-[360px]" : "min-h-[200px]"}`}
-    >
-      {/* Abstract map fragment */}
-      <MapFragment large={large} city={city} />
+    <article className="group relative flex flex-col rounded-[24px] bg-[var(--surface)] border border-[var(--border)] overflow-hidden transition-colors hover:border-[var(--ink)]">
+      {/* Image / upload slot */}
+      <ImageUpload
+        storageKey={imageKey}
+        rounded="lg"
+        aspect="aspect-[4/3]"
+        className="!rounded-none border-0 border-b border-[var(--border)]"
+        label={`Upload ${city} photo`}
+        hint="A photo of the neighborhood or clinic"
+        fallback={<DefaultMap city={city} />}
+      />
 
-      <div className={`relative p-6 ${large ? "sm:p-8" : ""} flex flex-col h-full justify-end`}>
-        <div className="flex items-center gap-2 mb-3">
-          <MapPin className="h-3.5 w-3.5 text-ink-muted" strokeWidth={1.5} />
-          <span className="eyebrow !text-[10px]">{neighborhood}</span>
+      <div className="flex flex-col p-6 gap-3 flex-1">
+        <div className="flex items-center justify-between gap-3">
+          <span className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11px] font-medium ${
+            isAvailable
+              ? "bg-[var(--sage)]/15 text-[color-mix(in_oklch,var(--sage)_60%,var(--ink))]"
+              : "bg-[var(--accent)]/12 text-[color-mix(in_oklch,var(--accent)_70%,var(--ink))]"
+          }`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${isAvailable ? "bg-[var(--sage)]" : "bg-[var(--accent)]"}`} aria-hidden />
+            {status}
+          </span>
+          <span className="inline-flex items-center gap-1 text-[11px] text-ink-soft">
+            <MapPin className="h-3 w-3" strokeWidth={1.5} aria-hidden />
+            {neighborhood}
+          </span>
         </div>
-        <h3 className={`font-semibold tracking-[-0.02em] text-ink ${large ? "text-[40px] sm:text-[56px]" : "text-[28px]"}`}>
+
+        <h3 className="text-[28px] sm:text-[32px] font-semibold tracking-[-0.022em] text-ink leading-[1.05]">
           {city}
         </h3>
-        <div className="mt-4 inline-flex items-center gap-2 self-start rounded-full border border-[var(--border)] bg-[var(--surface-elev)] px-3 py-1">
-          <span
-            className={`h-1.5 w-1.5 rounded-full ${isAvailable ? "bg-[var(--sage)]" : "bg-[var(--accent)]"}`}
-            aria-hidden
-          />
-          <span className="text-[11px] font-medium text-ink">{status}</span>
-        </div>
+
+        <a
+          href="#"
+          className="mt-auto inline-flex items-center justify-between gap-2 text-[14px] font-medium text-ink hover:text-[var(--primary)] transition-colors"
+        >
+          {cta}
+          <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" strokeWidth={1.75} />
+        </a>
       </div>
     </article>
   );
 }
 
-function MapFragment({ large, city }: { large?: boolean; city: string }) {
-  // Deterministic mock map by city name hash
+function DefaultMap({ city }: { city: string }) {
+  // Deterministic abstract grid — kept simple and consistent across cities.
   const hash = city.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  const seed = (n: number) => Math.abs(Math.sin((n + hash) * 12.9898) * 43758.5453) % 1;
-  const lines = Array.from({ length: large ? 22 : 14 }, (_, i) => i);
   return (
-    <svg
-      viewBox="0 0 400 280"
-      className="absolute inset-0 w-full h-full"
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden
-    >
-      <defs>
-        <linearGradient id={`fade-${city}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--surface)" stopOpacity="0" />
-          <stop offset="0.7" stopColor="var(--surface)" stopOpacity="0.6" />
-          <stop offset="1" stopColor="var(--surface)" stopOpacity="1" />
-        </linearGradient>
-      </defs>
-      {lines.map((i) => {
-        const x1 = Math.round(seed(i * 2) * 400);
-        const y1 = Math.round(seed(i * 2 + 1) * 280);
-        const x2 = Math.round(x1 + (seed(i * 3) - 0.5) * 220);
-        const y2 = Math.round(y1 + (seed(i * 3 + 1) - 0.5) * 80);
-        return (
+    <div className="absolute inset-0 bg-[var(--surface-elev)]">
+      <svg
+        viewBox="0 0 400 300"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id={`bg-${city}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="var(--surface)" stopOpacity="0" />
+            <stop offset="1" stopColor="var(--surface-elev)" stopOpacity="1" />
+          </linearGradient>
+        </defs>
+        {/* Soft grid */}
+        {Array.from({ length: 8 }).map((_, i) => (
           <line
-            key={i}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
+            key={`h-${i}`}
+            x1="0"
+            y1={i * 40}
+            x2="400"
+            y2={i * 40}
             stroke="var(--ink)"
-            strokeOpacity="0.08"
-            strokeWidth="1"
+            strokeOpacity="0.04"
           />
-        );
-      })}
-      <rect width="400" height="280" fill={`url(#fade-${city})`} />
-    </svg>
+        ))}
+        {Array.from({ length: 11 }).map((_, i) => (
+          <line
+            key={`v-${i}`}
+            x1={i * 40}
+            y1="0"
+            x2={i * 40}
+            y2="300"
+            stroke="var(--ink)"
+            strokeOpacity="0.04"
+          />
+        ))}
+        {/* Pin */}
+        <circle cx={200 + (hash % 60) - 30} cy={150 + (hash % 40) - 20} r="20" fill="var(--primary)" fillOpacity="0.12" />
+        <circle cx={200 + (hash % 60) - 30} cy={150 + (hash % 40) - 20} r="5" fill="var(--primary)" />
+        <rect width="400" height="300" fill={`url(#bg-${city})`} opacity="0.4" />
+      </svg>
+      <div className="absolute bottom-3 left-4 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.12em] text-ink-soft">
+        <MapPin className="h-3 w-3" strokeWidth={1.5} />
+        Approximate
+      </div>
+    </div>
   );
 }

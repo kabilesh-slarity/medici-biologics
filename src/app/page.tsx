@@ -6,8 +6,8 @@ import { BetterWay } from "@/components/sections/BetterWay";
 import { MeetDrGabi } from "@/components/sections/MeetDrGabi";
 import { DrGabiHub } from "@/components/sections/DrGabiHub";
 import { Process } from "@/components/sections/Process";
-import { FoundingMember } from "@/components/sections/FoundingMember";
 import { BiologicalPrecision } from "@/components/sections/BiologicalPrecision";
+import { FoundingMember } from "@/components/sections/FoundingMember";
 import { OnSite } from "@/components/sections/OnSite";
 
 export default function Home() {
@@ -21,8 +21,8 @@ export default function Home() {
         <MeetDrGabi />
         <DrGabiHub />
         <Process />
-        <FoundingMember />
         <BiologicalPrecision />
+        <FoundingMember />
         <OnSite />
       </main>
       <SiteFooter />

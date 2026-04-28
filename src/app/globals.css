@@ -7,12 +7,16 @@
   --bg: #f7f5f0;
   --surface: #ffffff;
   --surface-elev: #fbf9f3;
+  --surface-deep: #ece7da;
   --ink: #0a0e0d;
   --ink-muted: #5c625f;
+  --ink-soft: #8a8f8c;
   --border: #e5e1d8;
+  --border-strong: #cfc9bc;
   --primary: #0f2a2e;
   --primary-soft: #1f4d52;
   --accent: #9b6d3f;
+  --accent-soft: #b88a5c;
   --sage: #7b9080;
   --danger: #a0381f;
 
@@ -29,12 +33,16 @@
   --bg: #0b0f0e;
   --surface: #11171a;
   --surface-elev: #161d20;
+  --surface-deep: #0a0d0d;
   --ink: #f4f1ea;
   --ink-muted: #a0a6a2;
+  --ink-soft: #6f7572;
   --border: #1f2729;
+  --border-strong: #2c3538;
   --primary: #7ba89c;
   --primary-soft: #9dc4b8;
   --accent: #c99f73;
+  --accent-soft: #d8b48a;
   --sage: #9db5a1;
   --danger: #d97757;
 }
@@ -118,6 +126,42 @@ body::before {
   height: 1px;
   background: var(--border);
   border: 0;
+}
+
+/* Section tile rhythm — Apple-style alternating canvases */
+.tile-canvas { background: var(--bg); color: var(--ink); }
+.tile-surface { background: var(--surface); color: var(--ink); }
+.tile-elev { background: var(--surface-elev); color: var(--ink); }
+.tile-deep { background: var(--surface-deep); color: var(--ink); }
+.tile-ink {
+  background: var(--ink);
+  color: var(--bg);
+}
+.tile-primary {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+/* Pull-quote / manifesto */
+.manifesto {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+/* Soft elevation reserved for product/UI imagery (Apple's single shadow) */
+.shadow-product {
+  box-shadow:
+    0 1px 0 rgb(229 225 216 / 0.5),
+    0 8px 24px -12px rgb(10 14 13 / 0.18),
+    0 32px 64px -32px rgb(10 14 13 / 0.22);
+}
+
+.dark .shadow-product {
+  box-shadow:
+    0 1px 0 rgb(31 39 41 / 1),
+    0 24px 60px -24px rgb(0 0 0 / 0.55);
 }
 
 /* Skip link */
