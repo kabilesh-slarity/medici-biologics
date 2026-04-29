@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { site } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
-import { ImageUpload } from "@/components/ui/ImageUpload";
 
 export function OnSite() {
   const { eyebrow, headline, lede, cities } = site.onSite;
@@ -34,7 +33,6 @@ export function OnSite() {
                 neighborhood={c.neighborhood}
                 status={c.status}
                 cta={c.cta}
-                imageKey={c.imageKey}
               />
             </Reveal>
           ))}
@@ -49,109 +47,46 @@ function CityCard({
   neighborhood,
   status,
   cta,
-  imageKey,
 }: {
   city: string;
   neighborhood: string;
   status: string;
   cta: string;
-  imageKey: string;
 }) {
   const isAvailable = status.toLowerCase().includes("available");
   return (
-    <article className="group relative flex flex-col rounded-[24px] bg-[var(--surface)] border border-[var(--border)] overflow-hidden transition-colors hover:border-[var(--ink)]">
-      {/* Image / upload slot */}
-      <ImageUpload
-        storageKey={imageKey}
-        rounded="lg"
-        aspect="aspect-[4/3]"
-        className="!rounded-none border-0 border-b border-[var(--border)]"
-        label={`Upload ${city} photo`}
-        hint="A photo of the neighborhood or clinic"
-        fallback={<DefaultMap city={city} />}
-      />
+    <article className="group flex flex-col gap-6 p-7 rounded-[24px] bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--ink)] transition-colors">
+      <span
+        className={`self-start inline-flex items-center gap-1.5 h-6 px-2.5 rounded-full text-[11px] font-medium ${
+          isAvailable
+            ? "bg-[var(--sage)]/15 text-[color-mix(in_oklch,var(--sage)_60%,var(--ink))]"
+            : "bg-[var(--accent)]/12 text-[color-mix(in_oklch,var(--accent)_70%,var(--ink))]"
+        }`}
+      >
+        <span
+          className={`h-1.5 w-1.5 rounded-full ${isAvailable ? "bg-[var(--sage)]" : "bg-[var(--accent)]"}`}
+          aria-hidden
+        />
+        {status}
+      </span>
 
-      <div className="flex flex-col p-6 gap-3 flex-1">
-        <div className="flex items-center justify-between gap-3">
-          <span className={`inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-[11px] font-medium ${
-            isAvailable
-              ? "bg-[var(--sage)]/15 text-[color-mix(in_oklch,var(--sage)_60%,var(--ink))]"
-              : "bg-[var(--accent)]/12 text-[color-mix(in_oklch,var(--accent)_70%,var(--ink))]"
-          }`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${isAvailable ? "bg-[var(--sage)]" : "bg-[var(--accent)]"}`} aria-hidden />
-            {status}
-          </span>
-          <span className="inline-flex items-center gap-1 text-[11px] text-ink-soft">
-            <MapPin className="h-3 w-3" strokeWidth={1.5} aria-hidden />
-            {neighborhood}
-          </span>
-        </div>
-
-        <h3 className="text-[28px] sm:text-[32px] font-semibold tracking-[-0.022em] text-ink leading-[1.05]">
+      <div className="flex-1">
+        <h3 className="text-[28px] font-semibold tracking-[-0.022em] text-ink leading-[1.05]">
           {city}
         </h3>
-
-        <a
-          href="#"
-          className="mt-auto inline-flex items-center justify-between gap-2 text-[14px] font-medium text-ink hover:text-[var(--primary)] transition-colors"
-        >
-          {cta}
-          <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" strokeWidth={1.75} />
-        </a>
+        <p className="text-[13px] text-ink-muted mt-1">{neighborhood}</p>
       </div>
-    </article>
-  );
-}
 
-function DefaultMap({ city }: { city: string }) {
-  // Deterministic abstract grid — kept simple and consistent across cities.
-  const hash = city.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  return (
-    <div className="absolute inset-0 bg-[var(--surface-elev)]">
-      <svg
-        viewBox="0 0 400 300"
-        className="absolute inset-0 w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden
+      <a
+        href="#"
+        className="inline-flex items-center gap-2 text-[13px] font-medium text-ink-muted hover:text-ink group-hover:text-[var(--primary)] transition-colors"
       >
-        <defs>
-          <linearGradient id={`bg-${city}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="var(--surface)" stopOpacity="0" />
-            <stop offset="1" stopColor="var(--surface-elev)" stopOpacity="1" />
-          </linearGradient>
-        </defs>
-        {/* Soft grid */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <line
-            key={`h-${i}`}
-            x1="0"
-            y1={i * 40}
-            x2="400"
-            y2={i * 40}
-            stroke="var(--ink)"
-            strokeOpacity="0.04"
-          />
-        ))}
-        {Array.from({ length: 11 }).map((_, i) => (
-          <line
-            key={`v-${i}`}
-            x1={i * 40}
-            y1="0"
-            x2={i * 40}
-            y2="300"
-            stroke="var(--ink)"
-            strokeOpacity="0.04"
-          />
-        ))}
-        {/* Pin */}
-        <circle cx={200 + (hash % 60) - 30} cy={150 + (hash % 40) - 20} r="20" fill="var(--primary)" fillOpacity="0.12" />
-        <circle cx={200 + (hash % 60) - 30} cy={150 + (hash % 40) - 20} r="5" fill="var(--primary)" />
-        <rect width="400" height="300" fill={`url(#bg-${city})`} opacity="0.4" />
-      </svg>
-      <div className="absolute bottom-3 left-4 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.12em] text-ink-soft">
-        <MapPin className="h-3 w-3" strokeWidth={1.5} />
-        Approximate
-      </div>
-    </div>
+        {cta}
+        <ArrowUpRight
+          className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+          strokeWidth={1.75}
+        />
+      </a>
+    </article>
   );
 }

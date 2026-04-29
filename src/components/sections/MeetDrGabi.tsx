@@ -90,52 +90,74 @@ export function MeetDrGabi() {
   );
 }
 
+const BIOMARKER_ROWS = [
+  { name: "IGF-1", value: "182", unit: "ng/mL", status: "optimal" as const, bar: 0.72 },
+  { name: "DHEA-S", value: "284", unit: "µg/dL", status: "low" as const, bar: 0.38 },
+  { name: "hsCRP", value: "0.4", unit: "mg/L", status: "optimal" as const, bar: 0.15 },
+  { name: "TSH", value: "1.8", unit: "mIU/L", status: "optimal" as const, bar: 0.55 },
+  { name: "Free T3", value: "2.9", unit: "pg/mL", status: "borderline" as const, bar: 0.48 },
+  { name: "Vit D", value: "38", unit: "ng/mL", status: "low" as const, bar: 0.42 },
+];
+
 function DefaultPortrait() {
   const reduced = useReducedMotion();
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[var(--surface)]">
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 40%, color-mix(in oklch, var(--sage) 28%, transparent), transparent 70%)",
-        }}
-      />
-      <svg viewBox="0 0 460 575" className="absolute inset-0 w-full h-full" aria-hidden>
-        {[280, 230, 180, 130, 85].map((r, i) => (
-          <motion.circle
-            key={r}
-            cx="230"
-            cy="290"
-            r={r}
-            fill="none"
-            stroke="var(--primary)"
-            strokeOpacity={0.1 + i * 0.04}
-            strokeWidth={1}
-            initial={reduced ? false : { strokeDashoffset: 1400 }}
-            whileInView={reduced ? undefined : { strokeDashoffset: 0 }}
-            transition={{ duration: 1.4, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true }}
-            strokeDasharray="1400"
-          />
+    <div className="relative w-full h-full bg-[var(--surface)] overflow-hidden rounded-[inherit]">
+      {/* Header bar */}
+      <div className="px-5 pt-5 pb-4 border-b border-[var(--border)]">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink-soft">Biomarker Analysis</div>
+        <div className="mt-1 text-[14px] font-semibold text-ink">CBC + Hormone Panel</div>
+      </div>
+
+      {/* Biomarker rows */}
+      <div className="px-5 py-4 space-y-4">
+        {BIOMARKER_ROWS.map((m, i) => (
+          <motion.div
+            key={m.name}
+            initial={reduced ? false : { opacity: 0, x: -8 }}
+            whileInView={reduced ? undefined : { opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                    m.status === "optimal"
+                      ? "bg-[var(--sage)]"
+                      : m.status === "low"
+                      ? "bg-[var(--accent)]"
+                      : "bg-[var(--primary)]"
+                  }`}
+                />
+                <span className="text-[12px] font-medium text-ink">{m.name}</span>
+              </div>
+              <span className="text-[11px] tabular text-ink-muted">{m.value} {m.unit}</span>
+            </div>
+            <div className="h-1 rounded-full bg-[var(--border)] overflow-hidden">
+              <motion.div
+                className={`h-full rounded-full ${
+                  m.status === "optimal"
+                    ? "bg-[var(--sage)]"
+                    : m.status === "low"
+                    ? "bg-[var(--accent)]"
+                    : "bg-[var(--primary)]"
+                }`}
+                initial={reduced ? false : { scaleX: 0 }}
+                whileInView={reduced ? undefined : { scaleX: m.bar }}
+                transition={{ duration: 0.8, delay: 0.2 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: "-100px" }}
+                style={{ transformOrigin: "left" }}
+              />
+            </div>
+          </motion.div>
         ))}
-        <circle cx="230" cy="290" r="48" fill="var(--primary)" />
-        <text
-          x="230"
-          y="295"
-          textAnchor="middle"
-          fontSize="14"
-          fontWeight="600"
-          letterSpacing="0.08em"
-          fill="var(--bg)"
-        >
-          GABI
-        </text>
-      </svg>
-      <div className="absolute inset-x-0 bottom-0 px-5 py-4 bg-gradient-to-t from-[var(--surface)] via-[var(--surface)]/70 to-transparent">
-        <div className="text-[11px] uppercase tracking-[0.14em] text-ink-soft">Clinical Intelligence</div>
-        <div className="text-[14px] font-semibold text-ink">Dr. Gabi</div>
+      </div>
+
+      {/* Footer label */}
+      <div className="absolute inset-x-0 bottom-0 px-5 py-4 bg-gradient-to-t from-[var(--surface)] to-transparent">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink-soft">Clinical Intelligence</div>
+        <div className="text-[13px] font-semibold text-ink">Dr. Gabi</div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -24,16 +24,22 @@ export default function PaymentPage() {
   const [cvc, setCvc] = useState("");
   const [zip, setZip] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const expRef = useRef<HTMLInputElement>(null);
+  const cvcRef = useRef<HTMLInputElement>(null);
+  const zipRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!hydrated) return;
+    if (submitted) return;
     if (!state.profile.firstName) router.replace("/start");
     if (!state.consents.tos) router.replace("/start/consents");
     setCardNumber(state.payment.cardNumber);
     setExp(state.payment.exp);
     setCvc(state.payment.cvc);
     setZip(state.payment.zip);
-  }, [hydrated, state, router]);
+  }, [hydrated, state, router, submitted]);
 
   const brand: CardBrand = detectCardBrand(cardNumber);
   const valid =
@@ -61,25 +67,25 @@ export default function PaymentPage() {
       cardLast4: last4,
       cardBrand: brand,
     });
+    setSubmitted(true);
     clear();
     router.push("/start/welcome");
   };
 
   return (
-    <OnboardingShell step={5}>
-      <div className="w-full max-w-3xl">
-        <StepShell
-          eyebrow="Step 5 of 5"
-          title="Confirm and pay."
-          subtitle="Your card is processed securely. Cancel anytime in Settings."
-          back="/start/consents"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-5">
-              <OrderSummary />
-            </div>
+    <OnboardingShell step={5} wide>
+      <StepShell
+        eyebrow="Step 5 of 5"
+        title="Confirm and pay."
+        subtitle="Your card is processed securely. Cancel anytime in Settings."
+        back="/start/consents"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-5">
+            <OrderSummary />
+          </div>
 
-            <form onSubmit={onSubmit} className="lg:col-span-7 space-y-4">
+          <form onSubmit={onSubmit} className="lg:col-span-7 space-y-4">
               <Field
                 label="Card number"
                 name="cardNumber"
@@ -87,11 +93,16 @@ export default function PaymentPage() {
                 autoComplete="cc-number"
                 placeholder="1234 5678 9012 3456"
                 value={cardNumber}
-                onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+                onChange={(e) => {
+                  const formatted = formatCardNumber(e.target.value);
+                  setCardNumber(formatted);
+                  if (formatted.replace(/\s/g, "").length >= 16) expRef.current?.focus();
+                }}
                 suffix={<BrandGlyph brand={brand} />}
               />
               <div className="grid grid-cols-2 gap-3">
                 <Field
+                  ref={expRef}
                   label="Expiry"
                   name="exp"
                   inputMode="numeric"
@@ -100,20 +111,28 @@ export default function PaymentPage() {
                   value={exp}
                   onChange={(e) => {
                     const v = e.target.value.replace(/\D/g, "").slice(0, 4);
-                    setExp(v.length > 2 ? `${v.slice(0, 2)}/${v.slice(2)}` : v);
+                    const formatted = v.length > 2 ? `${v.slice(0, 2)}/${v.slice(2)}` : v;
+                    setExp(formatted);
+                    if (formatted.length === 5) cvcRef.current?.focus();
                   }}
                 />
                 <Field
+                  ref={cvcRef}
                   label="CVC"
                   name="cvc"
                   inputMode="numeric"
                   autoComplete="cc-csc"
                   placeholder="123"
                   value={cvc}
-                  onChange={(e) => setCvc(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/\D/g, "").slice(0, 4);
+                    setCvc(v);
+                    if (v.length >= 3) zipRef.current?.focus();
+                  }}
                 />
               </div>
               <Field
+                ref={zipRef}
                 label="ZIP / Postal code"
                 name="zip"
                 inputMode="numeric"
@@ -149,9 +168,8 @@ export default function PaymentPage() {
                 Secured by Stripe-grade encryption
               </div>
             </form>
-          </div>
-        </StepShell>
-      </div>
+        </div>
+      </StepShell>
     </OnboardingShell>
   );
 }

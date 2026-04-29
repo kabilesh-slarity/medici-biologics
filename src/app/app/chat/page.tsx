@@ -27,6 +27,7 @@ function ChatInner() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draft, setDraft] = useState(initialQ);
   const [typing, setTyping] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const initialSentRef = useRef(false);
 
   // Pick or create active chat on hydrate
@@ -88,6 +89,37 @@ function ChatInner() {
 
         {/* Conversation */}
         <main className="relative flex flex-col">
+          {/* Mobile history bar */}
+          <div className="lg:hidden border-b border-[var(--border)] px-4 py-2 flex items-center justify-between bg-[var(--surface-elev)]">
+            <button
+              type="button"
+              onClick={() => setHistoryOpen((o) => !o)}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-full text-[13px] text-ink-muted hover:text-ink hover:bg-[var(--surface)] transition-colors"
+            >
+              <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+              History
+            </button>
+            <button
+              type="button"
+              onClick={handleNew}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-full text-[13px] text-ink-muted hover:text-ink hover:bg-[var(--surface)] transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" strokeWidth={2.25} />
+              New
+            </button>
+          </div>
+
+          {/* Mobile collapsible history panel */}
+          {historyOpen && (
+            <div className="lg:hidden border-b border-[var(--border)] bg-[var(--surface-elev)] max-h-[40vh] overflow-y-auto flex flex-col">
+              <ChatHistory
+                chats={chats}
+                activeId={activeId}
+                onSelect={(id) => { setActiveId(id); setHistoryOpen(false); }}
+              />
+            </div>
+          )}
+
           {active && active.messages.length === 0 && <EmptyState onPick={(p) => sendMessage(p)} />}
 
           {active && active.messages.length > 0 && (

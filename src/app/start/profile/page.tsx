@@ -108,7 +108,7 @@ export default function ProfilePage() {
           {/* DOB segmented */}
           <div>
             <div className="text-[11px] uppercase tracking-[0.12em] text-ink-soft mb-2">Date of birth</div>
-            <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
+            <div className="grid grid-cols-[72px_72px_104px] gap-2">
               <SegmentInput ref={monthRef} placeholder="MM" max={2} value={month} onChange={setMonth}
                 onComplete={() => dayRef.current?.focus()} aria-label="Birth month" />
               <SegmentInput ref={dayRef} placeholder="DD" max={2} value={day} onChange={setDay}

@@ -40,7 +40,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease, delay: 0.05 }}
-              className="mt-5 text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.04] tracking-[-0.028em] font-semibold text-ink max-w-[14ch]"
+              className="mt-5 text-[44px] sm:text-[56px] lg:text-[68px] leading-[1.04] tracking-[-0.028em] font-semibold text-ink max-w-[14ch]"
             >
               {site.hero.headline}
             </motion.h1>

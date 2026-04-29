@@ -28,7 +28,7 @@ export function SiteHeader() {
             : "border-b border-transparent",
         )}
       >
-        <div className="container mx-auto flex h-16 items-center justify-between gap-6">
+        <div className="container mx-auto grid h-16 grid-cols-3 items-center gap-6">
           <a href="#" className="flex items-center gap-2 group" aria-label="Medici Biologics home">
             <Logomark />
             <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">
@@ -36,7 +36,7 @@ export function SiteHeader() {
             </span>
           </a>
 
-          <nav aria-label="Primary" className="hidden md:flex items-center gap-7">
+          <nav aria-label="Primary" className="hidden md:flex items-center justify-center gap-7">
             {site.brand.nav.map((n) => (
               <a
                 key={n.href}
@@ -48,23 +48,20 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <button
               aria-label="Open customization settings"
               onClick={() => setSettingsOpen(true)}
-              className="h-10 w-10 inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-surface-elev transition-colors"
+              className="h-10 w-10 hidden sm:inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-surface-elev transition-colors"
             >
               <Settings2 className="h-[18px] w-[18px]" strokeWidth={1.5} />
             </button>
 
             <LinkButton
               href={site.brand.primaryCta.href}
-              variant="primary"
+              variant={scrolled ? "primary" : "secondary"}
               size="sm"
-              className={cn(
-                "transition-opacity duration-300",
-                scrolled ? "opacity-100" : "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto",
-              )}
+              className="transition-opacity duration-300 opacity-100"
             >
               {site.brand.primaryCta.label}
             </LinkButton>

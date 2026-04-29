@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, FileText, ClipboardList, Send, Activity } from "lucide-react";
+import { ArrowRight, FileText, ClipboardList, Send } from "lucide-react";
 import { Topbar } from "@/components/dashboard/Topbar";
 import { StatusPill } from "@/components/dashboard/StatusPill";
 import { useSession } from "@/lib/session";
@@ -72,10 +72,6 @@ export default function HomePage() {
           <article className="rounded-[24px] bg-[var(--surface)] border border-[var(--border)] p-7 flex flex-col">
             <div className="flex items-center justify-between">
               <span className="eyebrow">Current protocol</span>
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-ink-muted">
-                <Activity className="h-3 w-3" strokeWidth={2} />
-                Awaiting approval
-              </span>
             </div>
             <h3 className="mt-4 text-[28px] font-semibold tracking-[-0.018em] text-ink">BPC-157</h3>
             <p className="mt-1 text-[13px] text-ink-muted">Recommended starter protocol</p>

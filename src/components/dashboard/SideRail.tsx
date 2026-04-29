@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home as HomeIcon,
   MessageSquare,
@@ -24,6 +24,7 @@ const NAV: { label: string; href: string; icon: LucideIcon }[] = [
 
 export function SideRail() {
   const pathname = usePathname();
+  const router = useRouter();
   const { session, signOut } = useSession();
   const initials = session
     ? `${session.profile.firstName[0] ?? ""}${session.profile.lastName[0] ?? ""}`.toUpperCase()
@@ -85,7 +86,7 @@ export function SideRail() {
           </Link>
           <button
             type="button"
-            onClick={signOut}
+            onClick={() => { signOut(); router.push("/"); }}
             className="mt-1 flex items-center gap-2 w-full h-9 px-2 rounded-lg text-[12px] text-ink-soft hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
           >
             <LogOut className="h-3.5 w-3.5" strokeWidth={1.5} />

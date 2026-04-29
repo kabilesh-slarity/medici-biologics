@@ -65,14 +65,39 @@ export function FoundingMember() {
         <Reveal delay={0.18}>
           <div className="mt-10 mx-auto max-w-3xl rounded-[28px] bg-[var(--surface)] border border-[var(--border)] shadow-product overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12">
-              {/* Left: price + CTA */}
-              <div className="lg:col-span-5 p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[var(--border)] bg-[var(--surface-elev)] flex flex-col">
+              {/* Left: perks */}
+              <div className="lg:col-span-7 p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[var(--border)]">
+                <div className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+                  Included from day one
+                </div>
+                <ul className="mt-5 space-y-5">
+                  {plan.perks.map((perk) => (
+                    <li key={perk.label} className="flex items-start gap-4">
+                      <span className="mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--sage)]/15 text-[var(--sage)] shrink-0">
+                        <Check className="h-4 w-4" strokeWidth={2.5} />
+                      </span>
+                      <div>
+                        <div className="text-[16px] font-semibold text-ink">{perk.label}</div>
+                        <p className="mt-1 text-[14px] leading-[1.55] text-ink-muted max-w-[42ch]">
+                          {perk.body}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Right: price + CTA */}
+              <div className="lg:col-span-5 p-8 lg:p-10 bg-[var(--surface-elev)] flex flex-col">
                 <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] text-[var(--accent)]">
                   <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
                   Founding Member
                 </div>
-                <div className="mt-5 flex items-baseline gap-2">
-                  <span className="text-[64px] sm:text-[72px] leading-[0.95] font-semibold tabular tracking-[-0.035em] text-ink">
+                <h3 className="mt-4 text-[22px] font-semibold tracking-[-0.018em] text-ink leading-[1.15]">
+                  The rate that never changes.
+                </h3>
+                <div className="mt-6 flex items-baseline gap-2">
+                  <span className="text-[40px] sm:text-[44px] leading-[0.95] font-semibold tabular tracking-[-0.035em] text-ink">
                     {plan.price}
                   </span>
                 </div>
@@ -91,28 +116,6 @@ export function FoundingMember() {
                   </Link>
                   <p className="mt-3 text-center text-[12px] text-ink-muted">{plan.helper}</p>
                 </div>
-              </div>
-
-              {/* Right: perks */}
-              <div className="lg:col-span-7 p-8 lg:p-10">
-                <div className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
-                  Included from day one
-                </div>
-                <ul className="mt-5 space-y-5">
-                  {plan.perks.map((perk) => (
-                    <li key={perk.label} className="flex items-start gap-4">
-                      <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[var(--sage)]/15 text-[var(--sage)] shrink-0">
-                        <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
-                      </span>
-                      <div>
-                        <div className="text-[15px] font-semibold text-ink">{perk.label}</div>
-                        <p className="mt-1 text-[13.5px] leading-[1.55] text-ink-muted max-w-[42ch]">
-                          {perk.body}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>

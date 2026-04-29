@@ -23,7 +23,7 @@ export function Topbar({ title }: { title: string }) {
             type="button"
             aria-label="Open theme settings"
             onClick={() => setOpen(true)}
-            className="h-10 w-10 inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
+            className="h-10 w-10 hidden sm:inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
           >
             <Settings2 className="h-[18px] w-[18px]" strokeWidth={1.5} />
           </button>

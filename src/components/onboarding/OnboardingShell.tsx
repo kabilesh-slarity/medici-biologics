@@ -10,9 +10,11 @@ import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
 export function OnboardingShell({
   step,
   children,
+  wide = false,
 }: {
   step: number;
   children: React.ReactNode;
+  wide?: boolean;
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   return (
@@ -43,7 +45,7 @@ export function OnboardingShell({
         <button
           onClick={() => setDrawerOpen(true)}
           aria-label="Open theme settings"
-          className="h-10 w-10 inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
+          className="h-10 w-10 hidden sm:inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
         >
           <Settings2 className="h-[18px] w-[18px]" strokeWidth={1.5} />
         </button>
@@ -57,7 +59,7 @@ export function OnboardingShell({
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="flex-1 flex items-center justify-center px-6 sm:px-10 py-10"
       >
-        <div className="w-full max-w-md">{children}</div>
+        <div className={`w-full ${wide ? "max-w-3xl" : "max-w-md"}`}>{children}</div>
       </motion.main>
 
       <footer className="px-6 sm:px-10 py-5 text-[11px] text-ink-soft text-center">

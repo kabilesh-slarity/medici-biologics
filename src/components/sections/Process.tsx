@@ -34,7 +34,6 @@ export function Process() {
               </h2>
               <p className="mt-6 text-[16px] leading-[1.55] text-ink-muted max-w-[48ch]">{lede}</p>
 
-              <p className="manifesto mt-12 text-ink max-w-[16ch]">{site.manifesto}</p>
             </div>
           </Reveal>
 

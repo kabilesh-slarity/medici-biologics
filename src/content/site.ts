@@ -10,7 +10,7 @@ export const site = {
       { label: "Founding", href: "#founding" },
       { label: "Locations", href: "#on-site" },
     ],
-    primaryCta: { label: "Become a Founding Member", href: "/start" },
+    primaryCta: { label: "Become a Founding Member", href: "#founding" },
   },
 
   hero: {
@@ -25,9 +25,9 @@ export const site = {
       output: { title: "BPC-157", spec: "250 mcg, 2x daily", reviewer: "Dr. Jenkins, MD" },
     },
     proof: [
-      { label: "Compounded in", value: "Licensed labs" },
-      { label: "Reviewed by", value: "Physicians" },
-      { label: "Shipped in", value: "48 hrs" },
+      { label: "Biomarkers analyzed", value: "50+" },
+      { label: "Physician approved", value: "Every order" },
+      { label: "Delivered in", value: "48 hrs" },
     ],
   },
 
@@ -147,9 +147,9 @@ export const site = {
     },
     scarcity: { claimed: 5, total: 500 },
     badges: [
-      { label: "Compounded in licensed labs" },
-      { label: "Reviewed by licensed physicians" },
       { label: "Certificate of Analysis on every order" },
+      { label: "Rate locked at $19/mo, never tiers up" },
+      { label: "Priority queue on every physician review" },
     ],
   },
 
@@ -199,6 +199,7 @@ export const site = {
           { label: "How it works", href: "#process" },
           { label: "Meet Dr. Gabi", href: "#dr-gabi" },
           { label: "On-Site Clinics", href: "#on-site" },
+          { label: "Member Dashboard", href: "/app" },
         ],
       },
       {

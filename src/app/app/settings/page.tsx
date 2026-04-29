@@ -3,11 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  User,
-  CreditCard,
-  Receipt,
-  Lock,
-  Palette,
   LogOut,
   Check,
 } from "lucide-react";
@@ -18,14 +13,6 @@ import { useSettings, type FontChoice, type Palette as PaletteT, isValidHex, nor
 import { THEME_PRESETS, type ThemePreset } from "@/lib/themePresets";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/cn";
-
-const SECTIONS = [
-  { id: "profile", label: "Profile", icon: User },
-  { id: "subscription", label: "Subscription", icon: CreditCard },
-  { id: "billing", label: "Billing", icon: Receipt },
-  { id: "privacy", label: "Privacy", icon: Lock },
-  { id: "appearance", label: "Appearance", icon: Palette },
-];
 
 export default function SettingsPage() {
   const { session, signOut } = useSession();
@@ -41,26 +28,8 @@ export default function SettingsPage() {
   return (
     <>
       <Topbar title="Settings" />
-      <div className="px-6 sm:px-8 py-8 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-10">
-          {/* Sub-rail */}
-          <nav aria-label="Settings sections" className="hidden lg:block">
-            <ul className="sticky top-24 space-y-0.5">
-              {SECTIONS.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className="flex items-center gap-2.5 h-9 px-3 rounded-xl text-[13px] text-ink-muted hover:text-ink hover:bg-[var(--surface-elev)] transition-colors"
-                  >
-                    <s.icon className="h-3.5 w-3.5" strokeWidth={1.5} />
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="space-y-6">
+      <div className="px-6 sm:px-8 py-8 max-w-3xl mx-auto">
+        <div className="space-y-6">
             {/* Profile */}
             <Section id="profile" title="Profile" subtitle="Personal details we have on file.">
               <Row label="Name" value={`${session.profile.firstName} ${session.profile.lastName}`} />
@@ -146,7 +115,6 @@ export default function SettingsPage() {
               </button>
             </div>
           </div>
-        </div>
       </div>
     </>
   );
