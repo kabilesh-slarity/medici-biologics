@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { Settings2 } from "lucide-react";
-import { site } from "@/content/site";
-import { LinkButton } from "@/components/ui/Button";
 import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
-import { cn } from "@/lib/cn";
+
+const NAV_LINKS = [
+  { href: "#protocol", label: "Protocol" },
+  { href: "#science", label: "Science" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#qualify", label: "Qualify" },
+];
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 48);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -21,50 +25,114 @@ export function SiteHeader() {
   return (
     <>
       <header
-        className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300",
-          scrolled
-            ? "bg-[color-mix(in_oklch,var(--bg)_80%,transparent)] backdrop-blur-md border-b border-[var(--border)]"
-            : "border-b border-transparent",
-        )}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          transition: "border-color 0.35s ease",
+          background: "#0A0A0A",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          borderBottom: "1px solid rgba(247, 247, 243, 0.07)",
+        }}
       >
-        <div className="container mx-auto grid h-16 grid-cols-3 items-center gap-6">
-          <a href="#" className="flex items-center gap-2 group" aria-label="Medici Biologics home">
-            <Logomark />
-            <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">
-              {site.brand.name}
-            </span>
+        <div
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            padding: "0 48px",
+            height: 64,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* Wordmark */}
+          <a
+            href="#"
+            aria-label="Medici Mind home"
+            style={{ textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+          >
+            <Wordmark />
           </a>
 
-          <nav aria-label="Primary" className="hidden md:flex items-center justify-center gap-7">
-            {site.brand.nav.map((n) => (
+          {/* Nav links */}
+          <nav aria-label="Primary" className="hidden md:flex" style={{ gap: 32, display: "flex", alignItems: "center" }}>
+            {NAV_LINKS.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
-                className="text-[13px] text-ink-muted hover:text-ink transition-colors"
+                style={{
+                  fontSize: 13,
+                  letterSpacing: "0.01em",
+                  color: "rgba(247, 247, 243, 0.65)",
+                  textDecoration: "none",
+                  transition: "color 0.18s ease",
+                  fontWeight: 400,
+                }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F7F7F3")}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247, 247, 243, 0.65)")}
               >
                 {n.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center justify-end gap-2">
+          {/* Actions */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <button
               aria-label="Open customization settings"
               onClick={() => setSettingsOpen(true)}
-              className="h-10 w-10 hidden sm:inline-flex items-center justify-center rounded-full text-ink-muted hover:text-ink hover:bg-surface-elev transition-colors"
+              style={{
+                width: 36,
+                height: 36,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "50%",
+                background: "transparent",
+                border: "none",
+                color: "rgba(247, 247, 243, 0.45)",
+                cursor: "pointer",
+                transition: "color 0.2s ease, background 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.color = "#F7F7F3";
+                el.style.background = "rgba(247, 247, 243, 0.08)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.color = "rgba(247, 247, 243, 0.45)";
+                el.style.background = "transparent";
+              }}
             >
-              <Settings2 className="h-[18px] w-[18px]" strokeWidth={1.5} />
+              <Settings2 style={{ width: 16, height: 16 }} strokeWidth={1.5} />
             </button>
 
-            <LinkButton
-              href={site.brand.primaryCta.href}
-              variant={scrolled ? "primary" : "secondary"}
-              size="sm"
-              className="transition-opacity duration-300 opacity-100"
+            <a
+              href="#qualify"
+              style={{
+                padding: "9px 20px",
+                background: "#1ECD92",
+                color: "#0A0A0A",
+                fontSize: 12,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                fontWeight: 700,
+                borderRadius: 999,
+                transition: "background 0.2s ease",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#2BE5A6")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#1ECD92")}
             >
-              {site.brand.primaryCta.label}
-            </LinkButton>
+              Begin Intake
+            </a>
           </div>
         </div>
       </header>
@@ -74,20 +142,34 @@ export function SiteHeader() {
   );
 }
 
-function Logomark() {
+function Wordmark() {
   return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 22 22"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-      className="text-[var(--primary)]"
+    <span
+      style={{
+        fontWeight: 700,
+        fontSize: 20,
+        letterSpacing: "-0.02em",
+        color: "#F7F7F3",
+        textTransform: "lowercase",
+        lineHeight: 1,
+        display: "inline-flex",
+        alignItems: "center",
+      }}
     >
-      <circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="1.25" opacity="0.35" />
-      <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.25" opacity="0.6" />
-      <circle cx="11" cy="11" r="2" fill="currentColor" />
-    </svg>
+      medi
+      <span
+        style={{
+          display: "inline-block",
+          width: 6,
+          height: 6,
+          background: "#1ECD92",
+          borderRadius: "50%",
+          margin: "0 1px",
+          transform: "translateY(-3px)",
+          flexShrink: 0,
+        }}
+      />
+      ci
+    </span>
   );
 }

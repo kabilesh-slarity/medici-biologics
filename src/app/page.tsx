@@ -1,29 +1,27 @@
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { Hero } from "@/components/sections/Hero";
-import { Problem } from "@/components/sections/Problem";
-import { BetterWay } from "@/components/sections/BetterWay";
-import { MeetDrGabi } from "@/components/sections/MeetDrGabi";
-import { DrGabiHub } from "@/components/sections/DrGabiHub";
-import { Process } from "@/components/sections/Process";
-import { BiologicalPrecision } from "@/components/sections/BiologicalPrecision";
-import { FoundingMember } from "@/components/sections/FoundingMember";
-import { OnSite } from "@/components/sections/OnSite";
+import { MindHero } from "@/components/sections/MindHero";
+import { MindStrap } from "@/components/sections/MindStrap";
+import { MindClinical } from "@/components/sections/MindClinical";
+import { MindBenefits } from "@/components/sections/MindBenefits";
+import { MindMechanism } from "@/components/sections/MindMechanism";
+import { MindTestimonial } from "@/components/sections/MindTestimonial";
+import { MindPricing } from "@/components/sections/MindPricing";
+import { MindQualify } from "@/components/sections/MindQualify";
 
 export default function Home() {
   return (
     <>
       <SiteHeader />
       <main id="main">
-        <Hero />
-        <Problem />
-        <BetterWay />
-        <MeetDrGabi />
-        <DrGabiHub />
-        <Process />
-        <BiologicalPrecision />
-        <FoundingMember />
-        <OnSite />
+        <MindHero />
+        <MindStrap />
+        <MindClinical />
+        <MindBenefits />
+        <MindMechanism />
+        <MindTestimonial />
+        <MindPricing />
+        <MindQualify />
       </main>
       <SiteFooter />
     </>

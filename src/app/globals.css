@@ -3,53 +3,50 @@
 @tailwind utilities;
 
 :root {
-  /* Light mode tokens (defaults) */
-  --bg: #f7f5f0;
-  --surface: #ffffff;
-  --surface-elev: #fbf9f3;
-  --surface-deep: #ece7da;
-  --ink: #0a0e0d;
-  --ink-muted: #5c625f;
-  --ink-soft: #8a8f8c;
-  --border: #e5e1d8;
-  --border-strong: #cfc9bc;
-  --primary: #0f2a2e;
-  --primary-soft: #1f4d52;
-  --accent: #9b6d3f;
-  --accent-soft: #b88a5c;
-  --sage: #7b9080;
-  --danger: #a0381f;
+  /* Nocturne light defaults */
+  --bg: #F7F7F3;
+  --surface: #FFFFFF;
+  --surface-elev: #F0F0EC;
+  --surface-deep: #E4E4E0;
+  --ink: #0A0A0A;
+  --ink-muted: #4F4F4F;
+  --ink-soft: #8C8C8C;
+  --border: #E8E8E2;
+  --border-strong: #D4D4CE;
+  --primary: #0A0A0A;
+  --primary-soft: #363636;
+  --accent: #1ECD92;
+  --accent-soft: #2BE5A6;
+  --sage: #15A574;
+  --danger: #C84040;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 200ms;
+  --dur-fast: 180ms;
   --dur: 300ms;
-  --dur-slow: 450ms;
+  --dur-slow: 500ms;
 
-  /* Active font (overridden by SettingsProvider via SetCSSVar). Defaults to Inter base. */
   --font-inter: var(--font-inter-base);
+  --font-serif: var(--font-serif-base), Georgia, 'Times New Roman', serif;
 }
 
 .dark {
-  --bg: #0b0f0e;
-  --surface: #11171a;
-  --surface-elev: #161d20;
-  --surface-deep: #0a0d0d;
-  --ink: #f4f1ea;
-  --ink-muted: #b5bcb7;
-  --ink-soft: #7f857f;
-  --border: #2a3336;
-  --border-strong: #3a4347;
-  --primary: #7ba89c;
-  --primary-soft: #9dc4b8;
-  --accent: #d2ad81;
-  --accent-soft: #ddbe96;
-  --sage: #9db5a1;
-  --danger: #e08a6c;
+  --bg: #0A0A0A;
+  --surface: #161616;
+  --surface-elev: #1C1C1C;
+  --surface-deep: #111111;
+  --ink: #F7F7F3;
+  --ink-muted: #B0B0A8;
+  --ink-soft: #6A6A62;
+  --border: #222220;
+  --border-strong: #2E2E2C;
+  --primary: #1ECD92;
+  --primary-soft: #46D6A5;
+  --accent: #2BE5A6;
+  --accent-soft: #3DFAB8;
+  --sage: #15A574;
+  --danger: #E07070;
 }
 
-* {
-  border-color: var(--border);
-}
 
 html {
   scroll-behavior: smooth;
@@ -69,20 +66,24 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
 }
 
-/* Paper grain — light mode only, atmosphere not decoration */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 100;
-  opacity: 0.025;
+  opacity: 0.018;
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   mix-blend-mode: multiply;
 }
@@ -92,26 +93,22 @@ body::before {
   mix-blend-mode: screen;
 }
 
-/* Focus ring — visible on all interactive elements */
 :where(a, button, input, select, textarea, [role="button"]):focus-visible {
-  outline: 2px solid var(--primary-soft);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Selection */
 ::selection {
-  background: var(--accent);
-  color: var(--surface);
+  background: #1ECD92;
+  color: #0A0A0A;
 }
 
-/* Tabular numerals for stats */
 .tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum", "ss01";
 }
 
-/* Section heading rhythm */
 .eyebrow {
   font-size: 12px;
   font-weight: 500;
@@ -121,65 +118,106 @@ body::before {
   font-feature-settings: "ss01";
 }
 
-/* Hairline divider */
 .hairline {
   height: 1px;
   background: var(--border);
   border: 0;
 }
 
-/* Section tile rhythm — Apple-style alternating canvases */
+/* Section tile rhythm */
 .tile-canvas { background: var(--bg); color: var(--ink); }
 .tile-surface { background: var(--surface); color: var(--ink); }
 .tile-elev { background: var(--surface-elev); color: var(--ink); }
 .tile-deep { background: var(--surface-deep); color: var(--ink); }
-.tile-ink {
-  background: var(--ink);
-  color: var(--bg);
-}
-.tile-primary {
-  background: var(--primary);
-  color: var(--bg);
-}
+.tile-ink { background: var(--ink); color: var(--bg); }
+.tile-primary { background: var(--primary); color: var(--bg); }
 
-/* Pull-quote / manifesto */
-.manifesto {
-  font-size: clamp(28px, 4vw, 44px);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  font-weight: 600;
-}
-
-/* Soft elevation reserved for product/UI imagery (Apple's single shadow) */
+/* Single elevation for product imagery */
 .shadow-product {
   box-shadow:
-    0 1px 0 rgb(229 225 216 / 0.5),
-    0 8px 24px -12px rgb(10 14 13 / 0.18),
-    0 32px 64px -32px rgb(10 14 13 / 0.22);
+    0 1px 0 rgb(232 232 226 / 0.5),
+    0 8px 24px -12px rgb(10 10 10 / 0.14),
+    0 32px 64px -32px rgb(10 10 10 / 0.18);
 }
-
 .dark .shadow-product {
   box-shadow:
-    0 1px 0 rgb(31 39 41 / 1),
-    0 24px 60px -24px rgb(0 0 0 / 0.55);
+    0 1px 0 rgb(34 34 32 / 1),
+    0 24px 60px -24px rgb(0 0 0 / 0.6);
 }
 
-/* Skip link */
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--ink);
-  color: var(--bg);
-  padding: 12px 16px;
-  z-index: 1000;
-  font-size: 14px;
-}
-.skip-link:focus {
-  left: 16px;
-  top: 16px;
-}
-
-/* No FOUC for theme: applied via inline script in layout head */
 html.dark { color-scheme: dark; }
 html { color-scheme: light; }
+
+/* ============================================================
+   MIND LANDING PAGE — section-specific styles
+   ============================================================ */
+
+/* Benefit row hover — translateX + faint emerald wash */
+.mind-benefit {
+  transition: padding-left var(--dur) var(--ease-out),
+              background var(--dur) ease;
+}
+.mind-benefit:hover {
+  padding-left: 12px;
+  background: rgba(30, 205, 146, 0.04);
+}
+
+/* Mechanism entry — top-trace animation via pseudo-element */
+.mind-mech-entry {
+  position: relative;
+  overflow: hidden;
+}
+.mind-mech-entry::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 1px;
+  width: 0;
+  background: #1ECD92;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mind-mech-entry:hover::after {
+  width: 100%;
+}
+
+/* Strap item hover */
+.mind-strap-item {
+  transition: transform var(--dur) var(--ease-out),
+              background var(--dur) ease;
+}
+.mind-strap-item:hover {
+  transform: translateY(-6px);
+  background: rgba(247, 247, 243, 0.03);
+}
+
+/* Pricing card hover */
+.mind-price-card {
+  transition: transform var(--dur) var(--ease-out),
+              border-color var(--dur) ease;
+}
+.mind-price-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Form option hover */
+.mind-option {
+  transition: background var(--dur-fast) ease,
+              border-color var(--dur-fast) ease;
+  cursor: pointer;
+}
+.mind-option:hover {
+  background: rgba(30, 205, 146, 0.06);
+  border-color: rgba(30, 205, 146, 0.4);
+}
+.mind-option:has(input:checked) {
+  background: rgba(30, 205, 146, 0.08);
+  border-color: #1ECD92;
+}
+
+/* CTA arrow transition */
+.mind-cta-arrow {
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.mind-btn-primary:hover .mind-cta-arrow {
+  transform: translateX(5px);
+}

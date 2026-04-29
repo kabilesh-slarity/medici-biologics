@@ -267,13 +267,13 @@ function ColorRow({
 
 function FontSection() {
   const { settings, setFont } = useSettings();
-  const opts: { v: FontChoice; label: string }[] = [
-    { v: "inter", label: "Inter" },
-    { v: "inter-tight", label: "Inter Tight" },
+  const opts: { v: FontChoice; label: string; sample: string }[] = [
+    { v: "inter", label: "Inter", sample: "Aa" },
+    { v: "inter-tight", label: "Tight", sample: "Aa" },
   ];
   return (
     <section>
-      <h3 className="eyebrow mb-3">Font</h3>
+      <h3 className="eyebrow mb-3">Interface Font</h3>
       <div className="grid grid-cols-2 gap-1 p-1 bg-[var(--surface-elev)] rounded-full">
         {opts.map((o) => (
           <button
@@ -291,6 +291,9 @@ function FontSection() {
           </button>
         ))}
       </div>
+      <p className="mt-2 text-[11px] text-ink-soft leading-relaxed">
+        Inter Tight uses tighter tracking for a denser, more compact feel.
+      </p>
     </section>
   );
 }
