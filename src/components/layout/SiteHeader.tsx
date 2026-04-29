@@ -28,7 +28,7 @@ export function SiteHeader() {
             : "border-b border-transparent",
         )}
       >
-        <div className="container mx-auto grid h-16 grid-cols-3 items-center gap-6">
+        <div className="container mx-auto grid h-16 grid-cols-2 md:grid-cols-3 items-center gap-6">
           <a href="#" className="flex items-center gap-2 group" aria-label="Medici Biologics home">
             <Logomark />
             <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">
@@ -61,7 +61,7 @@ export function SiteHeader() {
               href={site.brand.primaryCta.href}
               variant={scrolled ? "primary" : "secondary"}
               size="sm"
-              className="transition-opacity duration-300 opacity-100"
+              className="hidden sm:inline-flex transition-opacity duration-300 opacity-100"
             >
               {site.brand.primaryCta.label}
             </LinkButton>

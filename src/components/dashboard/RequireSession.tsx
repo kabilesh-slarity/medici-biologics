@@ -9,7 +9,7 @@ export function RequireSession({ children }: { children: React.ReactNode }) {
   const { session, hydrated } = useSession();
 
   useEffect(() => {
-    if (hydrated && !session) router.replace("/start");
+    if (hydrated && !session) router.replace("/");
   }, [hydrated, session, router]);
 
   if (!hydrated) return <div aria-hidden className="min-h-dvh" />;
