@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import { CountUp } from "@/components/effects/CountUp";
+
 const STANDARD_FEATURES = [
   "30-day Medici Mind supply",
   "Clinical intake review",
@@ -15,18 +18,12 @@ const MEMBER_FEATURES = [
   "Early access to future protocols",
 ];
 
-function CheckIcon() {
+function CheckIcon({ tone = "emerald" }: { tone?: "emerald" | "ink" }) {
   return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      style={{ flexShrink: 0 }}
-    >
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
       <path
         d="M2.5 7.5l3 3 6-6"
-        stroke="#1ECD92"
+        stroke={tone === "ink" ? "#0A0A0A" : "#1ECD92"}
         strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -36,8 +33,33 @@ function CheckIcon() {
 }
 
 export function MindPricing() {
+  useEffect(() => {
+    const cards = document.querySelectorAll<HTMLElement>(".mind-price-card");
+    const cleanups: (() => void)[] = [];
+    cards.forEach((card) => {
+      const sweep = card.querySelector<HTMLElement>(".mind-price-sweep");
+      const handleMove = (e: Event) => {
+        const pe = e as PointerEvent;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${pe.clientX - rect.left}px`);
+        card.style.setProperty("--my", `${pe.clientY - rect.top}px`);
+        if (sweep) sweep.style.opacity = "1";
+      };
+      const handleLeave = () => {
+        if (sweep) sweep.style.opacity = "0";
+      };
+      card.addEventListener("pointermove", handleMove);
+      card.addEventListener("pointerleave", handleLeave);
+      cleanups.push(() => {
+        card.removeEventListener("pointermove", handleMove);
+        card.removeEventListener("pointerleave", handleLeave);
+      });
+    });
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
+
   return (
-    <section id="pricing" style={{ background: "#F7F7F3" }}>
+    <section id="pricing" style={{ background: "#F7F7F3", position: "relative", overflow: "hidden" }}>
       <div
         style={{
           maxWidth: 1280,
@@ -99,20 +121,35 @@ export function MindPricing() {
             gap: 20,
             maxWidth: 960,
             margin: "0 auto",
+            position: "relative",
           }}
           className="mind-pricing-grid"
         >
-          {/* Standard */}
+            {/* Standard */}
           <div
-            className="mind-price-card"
+            className="mind-price-card mind-price-standard"
             style={{
               background: "#FFFFFF",
               border: "1px solid #E8E8E2",
               borderRadius: 24,
               padding: "52px 44px",
               position: "relative",
+              overflow: "hidden",
             }}
           >
+            <div
+              className="mind-price-sweep"
+              aria-hidden
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%), rgba(30, 205, 146, 0.06), transparent 50%)",
+                opacity: 0,
+                transition: "opacity 400ms ease",
+                pointerEvents: "none",
+              }}
+            />
             <div
               style={{
                 fontSize: 11,
@@ -149,7 +186,8 @@ export function MindPricing() {
               >
                 $
               </span>
-              <span
+              <CountUp
+                to={349}
                 className="mind-price-amount"
                 style={{
                   fontSize: 80,
@@ -159,9 +197,7 @@ export function MindPricing() {
                   color: "#0A0A0A",
                   fontVariantNumeric: "tabular-nums",
                 }}
-              >
-                349
-              </span>
+              />
             </div>
             <div style={{ fontSize: 13, color: "#8C8C8C", marginBottom: 32, fontWeight: 400 }}>
               single supply &middot; no commitment
@@ -211,6 +247,8 @@ export function MindPricing() {
                 textTransform: "uppercase",
                 fontWeight: 700,
                 transition: "background 0.2s ease, color 0.2s ease",
+                position: "relative",
+                zIndex: 1,
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement;
@@ -229,34 +267,51 @@ export function MindPricing() {
 
           {/* Featured — Subscription */}
           <div
-            className="mind-price-card"
+            className="mind-price-card mind-price-featured"
             style={{
               background: "#0A0A0A",
               border: "1px solid #0A0A0A",
               borderRadius: 24,
-              padding: "52px 44px",
+              padding: "0",
               position: "relative",
               color: "#F7F7F3",
+              overflow: "hidden",
             }}
           >
-            {/* Tag */}
+            {/* Gradient sweep */}
             <div
+              className="mind-price-sweep"
+              aria-hidden
               style={{
                 position: "absolute",
-                top: 20,
-                right: 20,
+                inset: 0,
+                background:
+                  "radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%), rgba(30, 205, 146, 0.18), transparent 50%)",
+                opacity: 0,
+                transition: "opacity 400ms ease",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Best Value banner */}
+            <div
+              style={{
                 background: "#1ECD92",
                 color: "#0A0A0A",
-                padding: "6px 14px",
-                borderRadius: 999,
-                fontSize: 10,
-                letterSpacing: "0.16em",
+                padding: "11px 20px",
+                fontSize: 11,
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 fontWeight: 700,
+                textAlign: "center",
+                position: "relative",
+                zIndex: 2,
               }}
             >
-              Best Value
+              Best Value — Most Popular
             </div>
+
+            <div className="mind-price-featured-inner" style={{ padding: "44px 44px 52px" }}>
 
             <div
               style={{
@@ -266,6 +321,7 @@ export function MindPricing() {
                 color: "#1ECD92",
                 marginBottom: 14,
                 fontWeight: 600,
+                position: "relative",
               }}
             >
               Subscription
@@ -277,12 +333,21 @@ export function MindPricing() {
                 marginBottom: 28,
                 letterSpacing: "-0.02em",
                 color: "#F7F7F3",
+                position: "relative",
               }}
             >
               Locked Member Rate
             </h3>
 
-            <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: 4,
+                marginBottom: 6,
+                position: "relative",
+              }}
+            >
               <span
                 style={{
                   fontSize: 22,
@@ -294,7 +359,8 @@ export function MindPricing() {
               >
                 $
               </span>
-              <span
+              <CountUp
+                to={319}
                 className="mind-price-amount"
                 style={{
                   fontSize: 80,
@@ -304,12 +370,49 @@ export function MindPricing() {
                   color: "#F7F7F3",
                   fontVariantNumeric: "tabular-nums",
                 }}
-              >
-                319
-              </span>
+              />
             </div>
-            <div style={{ fontSize: 13, color: "rgba(247, 247, 243, 0.5)", marginBottom: 32 }}>
+            <div
+              style={{
+                fontSize: 13,
+                color: "rgba(247, 247, 243, 0.5)",
+                marginBottom: 16,
+                position: "relative",
+              }}
+            >
               per month &middot; cancel anytime
+            </div>
+
+            {/* Savings callout inline */}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                marginBottom: 32,
+                padding: "6px 13px",
+                background: "rgba(30, 205, 146, 0.12)",
+                border: "1px solid rgba(30, 205, 146, 0.28)",
+                borderRadius: 999,
+                fontSize: 11,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: "#1ECD92",
+                position: "relative",
+              }}
+            >
+              <span
+                style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  background: "#1ECD92",
+                  boxShadow: "0 0 8px #1ECD92",
+                  flexShrink: 0,
+                }}
+              />
+              Save $360 / yr
             </div>
 
             <ul
@@ -319,6 +422,7 @@ export function MindPricing() {
                 margin: "0 0 36px",
                 borderTop: "1px solid rgba(247, 247, 243, 0.1)",
                 paddingTop: 28,
+                position: "relative",
               }}
             >
               {MEMBER_FEATURES.map((f) => (
@@ -355,29 +459,33 @@ export function MindPricing() {
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 fontWeight: 700,
-                transition: "background 0.2s ease, border-color 0.2s ease",
+                transition: "background 0.2s ease, border-color 0.2s ease, transform 0.2s ease",
+                position: "relative",
+                zIndex: 1,
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLElement;
                 el.style.background = "#2BE5A6";
                 el.style.borderColor = "#2BE5A6";
+                el.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
                 el.style.background = "#1ECD92";
                 el.style.borderColor = "#1ECD92";
+                el.style.transform = "translateY(0)";
               }}
             >
               Begin Subscription
             </a>
+            </div>{/* end mind-price-featured-inner */}
           </div>
         </div>
 
-        {/* No payment note */}
         <p
           style={{
             textAlign: "center",
-            marginTop: 28,
+            marginTop: 40,
             fontSize: 13,
             color: "#8C8C8C",
             fontWeight: 400,
@@ -390,10 +498,16 @@ export function MindPricing() {
       <style>{`
         @media (max-width: 720px) {
           .mind-pricing-grid {
-            grid-template-columns: 1fr !important;
+            display: flex !important;
+            flex-direction: column !important;
           }
-          .mind-price-card {
+          .mind-price-standard {
+            order: 1;
             padding: 36px 28px !important;
+          }
+          .mind-price-featured { order: 2; }
+          .mind-price-featured-inner {
+            padding: 32px 28px 40px !important;
           }
           .mind-price-amount {
             font-size: 64px !important;

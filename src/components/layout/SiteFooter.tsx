@@ -39,24 +39,142 @@ const DISCLAIMER =
 
 export function SiteFooter() {
   return (
-    <footer style={{ background: "#000000", color: "rgba(247, 247, 243, 0.6)" }}>
+    <footer style={{ background: "#080808", color: "rgba(247, 247, 243, 0.6)" }}>
+
+      {/* Pre-footer: editorial statement + CTA */}
+      <div style={{ position: "relative", overflow: "hidden" }}>
+        {/* Accent gradient line at top of footer */}
+        <div
+          aria-hidden
+          style={{
+            height: 1,
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(30,205,146,0.5) 50%, transparent 100%)",
+          }}
+        />
+        {/* Ambient green bloom */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 600,
+            height: 300,
+            background:
+              "radial-gradient(ellipse at 50% 0%, rgba(30,205,146,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <div
+          className="footer-statement-inner"
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            padding:
+              "clamp(56px, 8vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 7vw, 80px)",
+            boxSizing: "border-box",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 40,
+          }}
+        >
+          <p
+            className="footer-statement"
+            style={{
+              fontSize: "clamp(26px, 4vw, 52px)",
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.12,
+              color: "#F7F7F3",
+              margin: 0,
+            }}
+          >
+            Precision begins with
+            <br />
+            <em style={{ fontStyle: "italic", color: "#1ECD92" }}>a single protocol.</em>
+          </p>
+
+          <a
+            href="#qualify"
+            className="footer-cta-btn"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              background: "transparent",
+              border: "1.5px solid rgba(247, 247, 243, 0.18)",
+              color: "#F7F7F3",
+              padding: "15px 28px",
+              borderRadius: 999,
+              textDecoration: "none",
+              fontSize: 12,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              transition: "border-color 0.22s ease, color 0.22s ease",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.borderColor = "#1ECD92";
+              el.style.color = "#1ECD92";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.borderColor = "rgba(247, 247, 243, 0.18)";
+              el.style.color = "#F7F7F3";
+            }}
+          >
+            Begin Qualification
+            <svg width="13" height="9" viewBox="0 0 13 9" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+              <path
+                d="M1 4.5h11m0 0L8 1m4 3.5L8 8"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div
+        style={{
+          height: 1,
+          background: "rgba(247, 247, 243, 0.07)",
+        }}
+      />
+
+      {/* Main grid: brand + links */}
       <div
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "clamp(44px, 7vw, 80px) clamp(20px, 4vw, 48px) 0",
+          padding:
+            "clamp(40px, 6vw, 64px) clamp(20px, 4vw, 48px) 0",
           boxSizing: "border-box",
         }}
       >
-        {/* Top grid: brand + link columns */}
         <div className="footer-grid">
           {/* Brand column */}
           <div className="footer-brand">
-            <Logo className="footer-logo" width={72} height={36} style={{ marginBottom: 12 }} />
+            <Logo className="footer-logo" width={72} height={36} style={{ marginBottom: 14 }} />
             <p className="footer-tagline">
               Building the world&rsquo;s healthiest community. The AI-first peptide platform from
               the team behind Medici.
             </p>
+            {/* Small trust marks */}
+            <div className="footer-trust-row">
+              <span className="footer-trust-chip">503A Compounded</span>
+              <span className="footer-trust-chip">Physician-Guided</span>
+            </div>
           </div>
 
           {/* Link columns */}
@@ -65,11 +183,8 @@ export function SiteFooter() {
               <h4 className="footer-col-label">{col.label}</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {col.links.map((l) => (
-                  <li key={l.label} style={{ marginBottom: 10 }}>
-                    <a
-                      href={l.href}
-                      className="footer-link"
-                    >
+                  <li key={l.label} className="footer-link-item">
+                    <a href={l.href} className="footer-link">
                       {l.label}
                     </a>
                   </li>
@@ -79,20 +194,20 @@ export function SiteFooter() {
           ))}
         </div>
 
-        {/* Divider */}
+        {/* Bottom divider */}
         <div
           style={{
             height: 1,
-            background: "rgba(247, 247, 243, 0.07)",
+            background: "rgba(247, 247, 243, 0.06)",
             margin: "clamp(28px, 4vw, 48px) 0 0",
           }}
         />
 
-        {/* Bottom */}
+        {/* Bottom row */}
         <div className="footer-bottom">
           <p className="footer-disclaimer">{DISCLAIMER}</p>
           <div className="footer-legal-row">
-            <span style={{ fontSize: 12, color: "rgba(247, 247, 243, 0.3)" }}>
+            <span style={{ fontSize: 12, color: "rgba(247, 247, 243, 0.25)" }}>
               &copy; 2026 Medici Peptides
             </span>
             <div style={{ display: "flex", gap: 16 }}>
@@ -107,7 +222,6 @@ export function SiteFooter() {
       </div>
 
       <style>{`
-        /* Shared */
         .footer-logo .logo-wordmark { font-size: 18px; }
         .footer-logo .logo-dot { width: 5px; height: 5px; margin-top: 2px; }
         .footer-logo .logo-sub { font-size: 7.5px; }
@@ -116,12 +230,15 @@ export function SiteFooter() {
           font-size: 11px;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(247, 247, 243, 0.32);
-          margin-bottom: 14px;
+          color: rgba(247, 247, 243, 0.28);
+          margin-bottom: 16px;
           font-weight: 600;
         }
+        .footer-link-item {
+          margin-bottom: 10px;
+        }
         .footer-link {
-          color: rgba(247, 247, 243, 0.55);
+          color: rgba(247, 247, 243, 0.5);
           text-decoration: none;
           font-size: 14px;
           font-weight: 400;
@@ -129,16 +246,33 @@ export function SiteFooter() {
         }
         .footer-link:hover { color: #F7F7F3; }
 
+        .footer-trust-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-top: 16px;
+        }
+        .footer-trust-chip {
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          font-weight: 600;
+          color: rgba(30, 205, 146, 0.7);
+          border: 1px solid rgba(30, 205, 146, 0.2);
+          padding: 4px 10px;
+          border-radius: 999px;
+        }
+
         .footer-bottom {
-          padding: 24px 0 32px;
+          padding: 24px 0 36px;
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 14px;
         }
         .footer-disclaimer {
           font-size: 11px;
           line-height: 1.7;
-          color: rgba(247, 247, 243, 0.28);
+          color: rgba(247, 247, 243, 0.25);
           font-weight: 400;
           max-width: 820px;
         }
@@ -151,11 +285,11 @@ export function SiteFooter() {
         }
         .footer-legal-link {
           font-size: 12px;
-          color: rgba(247, 247, 243, 0.3);
+          color: rgba(247, 247, 243, 0.28);
           text-decoration: none;
           transition: color 0.18s ease;
         }
-        .footer-legal-link:hover { color: rgba(247, 247, 243, 0.65); }
+        .footer-legal-link:hover { color: rgba(247, 247, 243, 0.6); }
 
         /* Desktop */
         .footer-grid {
@@ -167,9 +301,10 @@ export function SiteFooter() {
         .footer-tagline {
           font-size: 14px;
           line-height: 1.65;
-          color: rgba(247, 247, 243, 0.42);
+          color: rgba(247, 247, 243, 0.38);
           font-weight: 400;
           max-width: 280px;
+          margin: 0;
         }
 
         /* Tablet */
@@ -182,7 +317,7 @@ export function SiteFooter() {
             display: flex;
             align-items: center;
             gap: 20px;
-            padding-bottom: 20px;
+            padding-bottom: 24px;
             border-bottom: 1px solid rgba(247, 247, 243, 0.06);
           }
           .footer-logo { margin-bottom: 0 !important; }
@@ -191,50 +326,62 @@ export function SiteFooter() {
             max-width: none;
             flex: 1;
           }
+          .footer-trust-row { display: none; }
+        }
+
+        /* Mobile statement layout */
+        @media (max-width: 640px) {
+          .footer-statement-inner {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 28px !important;
+          }
         }
 
         /* Mobile */
         @media (max-width: 560px) {
           .footer-grid {
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 0 12px;
+            gap: 32px 16px;
           }
-          /* Brand spans full width, compact row */
           .footer-brand {
             grid-column: 1 / -1;
-            flex-direction: row;
+            flex-direction: column;
             align-items: flex-start;
             gap: 12px;
-            padding-bottom: 20px;
-            margin-bottom: 4px;
-            flex-wrap: nowrap;
+            padding-bottom: 32px;
+            margin-bottom: 0;
           }
-          .footer-logo { margin-bottom: 0 !important; }
+          .footer-logo { margin-bottom: 4px !important; }
           .footer-tagline {
-            font-size: 12px;
-            line-height: 1.55;
-            color: rgba(247, 247, 243, 0.35) !important;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(247, 247, 243, 0.38) !important;
+            max-width: 300px;
           }
-          /* Link columns: all three side-by-side, smaller text */
+          .footer-trust-row { display: flex; }
           .footer-col-label {
-            font-size: 9px;
-            margin-bottom: 10px;
+            font-size: 10px;
+            margin-bottom: 14px;
+          }
+          .footer-link-item {
+            margin-bottom: 16px;
           }
           .footer-link {
-            font-size: 12.5px;
+            font-size: 14px;
           }
-          /* Tighter bottom */
           .footer-bottom {
-            padding: 20px 0 24px;
-            gap: 12px;
+            padding: 28px 0 40px;
+            gap: 16px;
           }
           .footer-disclaimer {
-            font-size: 10.5px;
-            line-height: 1.65;
+            font-size: 11px;
+            line-height: 1.75;
           }
           .footer-legal-row {
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
           }
         }
       `}</style>

@@ -1,20 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { NeuralLattice } from "@/components/effects/NeuralLattice";
 
 const VARIANTS = [
   {
+    roman: "I",
     lead: "Distraction",
     tail: "the default.",
     pathway: "Semax · Focus & Executive Function",
   },
   {
+    roman: "II",
     lead: "Anxiety",
     tail: "your future.",
     pathway: "Selank · Mood & Stress Resilience",
   },
   {
+    roman: "III",
     lead: "Decline",
     tail: "inevitable.",
     pathway: "Dihexa · Neuroplasticity Pathway",
@@ -25,6 +29,7 @@ const TRUST_ITEMS = ["503A Compounded", "Physician-Guided", "Licensed Clinicians
 
 export function MindHero() {
   const [idx, setIdx] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setIdx((i) => (i + 1) % 3), 5200);
@@ -35,6 +40,8 @@ export function MindHero() {
 
   return (
     <section
+      ref={sectionRef}
+      aria-label="Hero"
       style={{
         background: "#0A0A0A",
         color: "#F7F7F3",
@@ -46,7 +53,19 @@ export function MindHero() {
         justifyContent: "center",
       }}
     >
-      <OrbitalRings />
+      <NeuralLattice />
+
+      {/* Slow-drifting ambient orbs — atmospheric depth without distraction */}
+      <div aria-hidden style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
+        <div className="hero-orb hero-orb-a" />
+        <div className="hero-orb hero-orb-b" />
+      </div>
+
+      {/* corner registry marks */}
+      <CornerRegistry pos="tl" />
+      <CornerRegistry pos="tr" />
+      <CornerRegistry pos="bl" />
+      <CornerRegistry pos="br" />
 
       <div
         className="mind-hero-container"
@@ -54,11 +73,64 @@ export function MindHero() {
           maxWidth: 1280,
           margin: "0 auto",
           position: "relative",
-          zIndex: 2,
+          zIndex: 3,
           width: "100%",
           boxSizing: "border-box",
         }}
       >
+        {/* Roman numeral indicator */}
+        <div
+          className="mind-hero-roman"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 14,
+            marginBottom: 36,
+            color: "rgba(247, 247, 243, 0.42)",
+          }}
+        >
+          <span
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+            }}
+          >
+            Protocol
+          </span>
+          <span
+            style={{
+              width: 24,
+              height: 1,
+              background: "rgba(247, 247, 243, 0.14)",
+            }}
+          />
+          {VARIANTS.map((variant, i) => (
+            <button
+              key={variant.roman}
+              type="button"
+              onClick={() => setIdx(i)}
+              aria-label={`Show ${variant.pathway}`}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontFamily: "inherit",
+                fontSize: 13,
+                fontWeight: i === idx ? 600 : 400,
+                fontStyle: "italic",
+                letterSpacing: "0.06em",
+                color: i === idx ? "#1ECD92" : "rgba(247, 247, 243, 0.36)",
+                transition: "color 0.3s ease",
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {variant.roman}
+            </button>
+          ))}
+        </div>
 
         {/* Rotating headline */}
         <AnimatePresence mode="wait">
@@ -73,7 +145,7 @@ export function MindHero() {
               fontWeight: 700,
               lineHeight: 1.05,
               letterSpacing: "-0.04em",
-              marginBottom: 18,
+              marginBottom: 24,
               marginTop: 0,
               maxWidth: 1100,
               color: "#F7F7F3",
@@ -98,7 +170,7 @@ export function MindHero() {
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              marginBottom: 24,
+              marginBottom: 32,
               padding: "6px 14px 6px 11px",
               background: "rgba(30, 205, 146, 0.08)",
               border: "1px solid rgba(30, 205, 146, 0.22)",
@@ -118,13 +190,13 @@ export function MindHero() {
                 borderRadius: "50%",
                 display: "inline-block",
                 flexShrink: 0,
+                animation: "heroChipPulse 1.6s ease-in-out infinite",
               }}
             />
             {v.pathway}
           </motion.div>
         </AnimatePresence>
 
-        {/* Body — shorter/smaller on mobile */}
         <motion.p
           initial={{ y: 12 }}
           animate={{ y: 0 }}
@@ -134,7 +206,7 @@ export function MindHero() {
             lineHeight: 1.6,
             maxWidth: 600,
             color: "rgba(247, 247, 243, 0.65)",
-            marginBottom: 32,
+            marginBottom: 40,
             fontWeight: 400,
           }}
         >
@@ -149,7 +221,6 @@ export function MindHero() {
           </span>
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           initial={{ y: 12 }}
           animate={{ y: 0 }}
@@ -158,8 +229,7 @@ export function MindHero() {
           style={{
             display: "flex",
             gap: 20,
-            alignItems: "center",
-            marginBottom: 44,
+            marginBottom: 56,
           }}
         >
           <a
@@ -177,18 +247,22 @@ export function MindHero() {
               textDecoration: "none",
               fontWeight: 700,
               borderRadius: 999,
-              transition: "background 0.2s ease, transform 0.2s ease",
+              transition: "background 0.2s ease, transform 0.2s ease, box-shadow 0.3s ease",
               whiteSpace: "nowrap",
+              position: "relative",
+              boxShadow: "0 0 0 0 rgba(30, 205, 146, 0)",
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.background = "#2BE5A6";
               el.style.transform = "translateY(-1px)";
+              el.style.boxShadow = "0 8px 32px -8px rgba(30, 205, 146, 0.55)";
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLElement;
               el.style.background = "#1ECD92";
               el.style.transform = "translateY(0)";
+              el.style.boxShadow = "0 0 0 0 rgba(30, 205, 146, 0)";
             }}
           >
             Begin Qualification
@@ -239,7 +313,6 @@ export function MindHero() {
           </a>
         </motion.div>
 
-        {/* Trust strip */}
         <motion.div
           initial={{ opacity: 0.3 }}
           animate={{ opacity: 1 }}
@@ -268,10 +341,53 @@ export function MindHero() {
         </motion.div>
       </div>
 
+      <ScrollCue />
+
       <style>{`
-        /* Mobile base */
+        @keyframes heroChipPulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.6); opacity: 0.5; }
+        }
+
+        @keyframes heroOrbDrift1 {
+          0%   { transform: translate(0px, 0px) scale(1); }
+          100% { transform: translate(140px, 90px) scale(1.12); }
+        }
+        @keyframes heroOrbDrift2 {
+          0%   { transform: translate(0px, 0px) scale(1.08); }
+          100% { transform: translate(-90px, -70px) scale(1); }
+        }
+
+        .hero-orb {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+        }
+        .hero-orb-a {
+          width: 720px;
+          height: 720px;
+          background: radial-gradient(circle, rgba(30,205,146,0.065) 0%, transparent 68%);
+          top: -220px;
+          left: -220px;
+          filter: blur(60px);
+          animation: heroOrbDrift1 22s ease-in-out infinite alternate;
+        }
+        .hero-orb-b {
+          width: 540px;
+          height: 540px;
+          background: radial-gradient(circle, rgba(21,165,116,0.05) 0%, transparent 70%);
+          bottom: -120px;
+          right: -120px;
+          filter: blur(60px);
+          animation: heroOrbDrift2 28s ease-in-out infinite alternate;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-orb-a, .hero-orb-b { animation: none; }
+        }
+
         .mind-hero-container {
-          padding: 88px 20px 60px;
+          padding: 104px 24px 72px;
         }
         .mind-hero-headline {
           font-size: clamp(38px, 11vw, 96px);
@@ -288,17 +404,12 @@ export function MindHero() {
         }
         .hero-cta-primary {
           padding: 14px 28px;
-          width: 100%;
-          justify-content: center;
+          width: auto;
         }
         .hero-cta-secondary {
           display: none;
         }
 
-        .hero-meta-desktop { display: none; }
-        .hero-meta-mobile { display: inline-flex; }
-
-        /* Trust: 2×2 grid on smallest screens */
         .mind-hero-trust {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -308,19 +419,10 @@ export function MindHero() {
           display: block;
         }
 
-        .orbital-rings {
-          display: none;
-        }
-
-        /* 480px+: CTAs in a row, trust in a row, body full */
         @media (min-width: 480px) {
           .mind-hero-ctas {
             flex-direction: row;
             align-items: center;
-          }
-          .hero-cta-primary {
-            width: auto;
-            justify-content: flex-start;
           }
           .hero-cta-secondary {
             display: block;
@@ -345,26 +447,16 @@ export function MindHero() {
           .hero-body-short { display: none; }
         }
 
-        /* 640px+: switch to desktop meta row, expand body */
         @media (min-width: 640px) {
           .mind-hero-container {
             padding: clamp(100px, 12vw, 140px) clamp(28px, 4vw, 48px) clamp(64px, 8vw, 80px);
           }
-          .hero-meta-desktop { display: flex; }
-          .hero-meta-mobile { display: none; }
           .mind-hero-body {
             font-size: 17px;
-          }
-          .orbital-rings {
-            display: block;
-            opacity: 0.14;
           }
         }
 
         @media (min-width: 900px) {
-          .orbital-rings {
-            opacity: 0.28;
-          }
           .mind-hero-body {
             font-size: 19px;
           }
@@ -374,31 +466,91 @@ export function MindHero() {
   );
 }
 
-function OrbitalRings() {
+function CornerRegistry({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
+  const offset = 24;
+  const positions: Record<string, React.CSSProperties> = {
+    tl: { top: offset, left: offset },
+    tr: { top: offset, right: offset },
+    bl: { bottom: offset, left: offset },
+    br: { bottom: offset, right: offset },
+  };
+  const rotations: Record<string, number> = { tl: 0, tr: 90, bl: 270, br: 180 };
   return (
     <svg
-      viewBox="0 0 900 900"
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
       fill="none"
       aria-hidden
-      className="orbital-rings"
+      className="hero-corner"
       style={{
         position: "absolute",
-        top: "50%",
-        right: "-160px",
-        transform: "translateY(-50%)",
-        width: 780,
-        height: 780,
-        pointerEvents: "none",
+        zIndex: 2,
+        opacity: 0.32,
+        transform: `rotate(${rotations[pos]}deg)`,
+        ...positions[pos],
       }}
     >
-      <circle cx="450" cy="450" r="420" stroke="#F7F7F3" strokeWidth="0.5" strokeDasharray="2 7" />
-      <circle cx="450" cy="450" r="340" stroke="#F7F7F3" strokeWidth="0.5" opacity="0.65" />
-      <circle cx="450" cy="450" r="250" stroke="#F7F7F3" strokeWidth="0.4" strokeDasharray="1 5" opacity="0.5" />
-      <circle cx="450" cy="450" r="160" stroke="#F7F7F3" strokeWidth="0.4" opacity="0.35" />
-      <circle cx="450" cy="30" r="3.5" fill="#1ECD92" />
-      <circle cx="870" cy="450" r="2.5" fill="#1ECD92" opacity="0.7" />
-      <circle cx="120" cy="560" r="2" fill="#F7F7F3" opacity="0.4" />
-      <circle cx="700" cy="180" r="2" fill="#F7F7F3" opacity="0.3" />
+      <path d="M2 8 V2 H8" stroke="rgba(247, 247, 243, 0.6)" strokeWidth="1" />
+      <circle cx="2" cy="2" r="1" fill="#1ECD92" />
     </svg>
+  );
+}
+
+function ScrollCue() {
+  return (
+    <div
+      aria-hidden
+      className="hero-scroll-cue"
+      style={{
+        position: "absolute",
+        bottom: 32,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 4,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 10,
+        color: "rgba(247, 247, 243, 0.36)",
+        fontSize: 10,
+        letterSpacing: "0.3em",
+        textTransform: "uppercase",
+        fontWeight: 500,
+      }}
+    >
+      <span>Scroll</span>
+      <span
+        style={{
+          width: 1,
+          height: 36,
+          background: "linear-gradient(to bottom, rgba(247, 247, 243, 0.4), transparent)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: 1,
+            height: 14,
+            background: "#1ECD92",
+            animation: "heroScrollTick 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite",
+          }}
+        />
+      </span>
+      <style>{`
+        @keyframes heroScrollTick {
+          0% { transform: translateY(-14px); opacity: 0; }
+          30% { opacity: 1; }
+          100% { transform: translateY(36px); opacity: 0; }
+        }
+        @media (max-width: 640px) {
+          .hero-scroll-cue { display: none; }
+        }
+      `}</style>
+    </div>
   );
 }

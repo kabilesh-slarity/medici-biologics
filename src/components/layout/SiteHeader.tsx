@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Settings2, Menu, X } from "lucide-react";
 import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
 import { Logo } from "@/components/layout/Logo";
@@ -16,6 +16,9 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pastHeroCta, setPastHeroCta] = useState(false);
+  // Ref so hover handlers always read the latest value without stale closure
+  const pastHeroCtaRef = useRef(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 48);
@@ -32,6 +35,24 @@ export function SiteHeader() {
     }
   }, [mobileMenuOpen]);
 
+  // Watch when the hero CTA scrolls out of view — flip button to primary
+  useEffect(() => {
+    const heroCta = document.querySelector(".hero-cta-primary");
+    if (!heroCta) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        const past = !entry.isIntersecting;
+        setPastHeroCta(past);
+        pastHeroCtaRef.current = past;
+      },
+      { threshold: 0 },
+    );
+    obs.observe(heroCta);
+    return () => obs.disconnect();
+  }, []);
+
+  const isOpaque = scrolled || mobileMenuOpen;
+
   return (
     <>
       <header
@@ -41,11 +62,11 @@ export function SiteHeader() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: scrolled ? "rgba(10,10,10,0.96)" : "#0A0A0A",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(247, 247, 243, 0.07)",
-          transition: "background 0.3s ease",
+          background: isOpaque ? "rgba(10,10,10,0.96)" : "transparent",
+          backdropFilter: isOpaque ? "blur(12px)" : "none",
+          WebkitBackdropFilter: isOpaque ? "blur(12px)" : "none",
+          borderBottom: `1px solid ${isOpaque ? "rgba(247, 247, 243, 0.07)" : "transparent"}`,
+          transition: "background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease",
         }}
       >
         <div
@@ -58,7 +79,6 @@ export function SiteHeader() {
             alignItems: "center",
             justifyContent: "space-between",
             boxSizing: "border-box",
-            gap: 24,
           }}
         >
           {/* Logo — left */}
@@ -70,14 +90,11 @@ export function SiteHeader() {
             <Logo className="header-logo" width={80} height={40} />
           </a>
 
-          {/* Desktop nav — centered */}
+          {/* Desktop nav — truly centered via absolute positioning */}
           <nav
             aria-label="Primary"
             className="header-nav"
             style={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
               gap: 40,
               alignItems: "center",
             }}
@@ -109,6 +126,7 @@ export function SiteHeader() {
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             {/* Settings gear */}
             <button
+              className="header-settings"
               aria-label="Open customization settings"
               onClick={() => setSettingsOpen(true)}
               style={{
@@ -138,25 +156,47 @@ export function SiteHeader() {
               <Settings2 style={{ width: 16, height: 16 }} strokeWidth={1.5} />
             </button>
 
-            {/* Desktop CTA */}
+            {/* Desktop CTA — secondary until hero CTA scrolls out of view */}
             <a
               href="#qualify"
               className="header-cta"
               style={{
                 padding: "9px 20px",
-                background: "#1ECD92",
-                color: "#0A0A0A",
+                background: pastHeroCta ? "#1ECD92" : "transparent",
+                color: pastHeroCta ? "#0A0A0A" : "rgba(247,247,243,0.85)",
+                border: pastHeroCta
+                  ? "1.5px solid #1ECD92"
+                  : "1.5px solid rgba(247,247,243,0.28)",
                 fontSize: 12,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 textDecoration: "none",
                 fontWeight: 700,
                 borderRadius: 999,
-                transition: "background 0.2s ease",
+                transition: "background 0.35s ease, color 0.35s ease, border-color 0.35s ease",
                 whiteSpace: "nowrap",
               }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#2BE5A6")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#1ECD92")}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                if (pastHeroCtaRef.current) {
+                  el.style.background = "#2BE5A6";
+                  el.style.borderColor = "#2BE5A6";
+                } else {
+                  el.style.borderColor = "rgba(247,247,243,0.65)";
+                  el.style.color = "#F7F7F3";
+                }
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                if (pastHeroCtaRef.current) {
+                  el.style.background = "#1ECD92";
+                  el.style.borderColor = "#1ECD92";
+                  el.style.color = "#0A0A0A";
+                } else {
+                  el.style.borderColor = "rgba(247,247,243,0.28)";
+                  el.style.color = "rgba(247,247,243,0.85)";
+                }
+              }}
             >
               Begin Intake
             </a>
@@ -257,25 +297,44 @@ export function SiteHeader() {
       <style>{`
         .header-inner {
           padding: 0 20px;
+          position: relative;
+        }
+        .header-logo {
+          width: 72px;
+          height: 36px;
         }
         .header-nav {
-          display: none;
+          display: none !important;
         }
         .header-cta {
+          display: none !important;
+        }
+        .header-settings {
           display: none !important;
         }
         .header-hamburger {
           display: flex;
         }
+
         @media (min-width: 768px) {
           .header-inner {
             padding: 0 48px;
           }
+          .header-logo {
+            width: 80px;
+            height: 40px;
+          }
           .header-nav {
-            display: flex;
+            display: flex !important;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
           }
           .header-cta {
             display: inline-flex !important;
+          }
+          .header-settings {
+            display: flex !important;
           }
           .header-hamburger {
             display: none !important;
