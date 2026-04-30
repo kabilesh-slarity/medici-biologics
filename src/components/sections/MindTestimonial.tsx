@@ -4,7 +4,7 @@ export function MindTestimonial() {
       style={{
         background: "#0A0A0A",
         color: "#F7F7F3",
-        padding: "160px 48px",
+        padding: "clamp(80px, 12vw, 160px) clamp(20px, 4vw, 48px)",
         textAlign: "center",
         position: "relative",
         overflow: "hidden",

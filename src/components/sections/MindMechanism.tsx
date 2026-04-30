@@ -29,7 +29,7 @@ export function MindMechanism() {
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "140px 48px",
+          padding: "clamp(72px, 11vw, 140px) clamp(20px, 4vw, 48px)",
           boxSizing: "border-box",
         }}
       >
@@ -127,6 +127,7 @@ export function MindMechanism() {
                 {/* Name + formula */}
                 <div>
                   <h3
+                    className="mind-mech-name"
                     style={{
                       fontSize: "clamp(48px, 6vw, 80px)",
                       fontWeight: 700,
@@ -190,16 +191,31 @@ export function MindMechanism() {
           }
           .mind-mech-row > :last-child {
             grid-column: 2 / -1;
-            margin-top: 24px;
+            margin-top: 20px;
           }
         }
         @media (max-width: 900px) {
           .mind-mech-header {
             grid-template-columns: 1fr !important;
-            gap: 24px !important;
+            gap: 20px !important;
+            margin-bottom: 48px !important;
           }
           .mind-mech-row {
-            grid-template-columns: 32px 1fr !important;
+            grid-template-columns: 28px 1fr !important;
+            gap: 0 16px !important;
+          }
+          .mind-mech-entry {
+            padding-top: 36px !important;
+            padding-bottom: 36px !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .mind-mech-name {
+            font-size: clamp(36px, 11vw, 56px) !important;
+          }
+          .mind-mech-row {
+            grid-template-columns: 24px 1fr !important;
+            gap: 0 14px !important;
           }
         }
       `}</style>

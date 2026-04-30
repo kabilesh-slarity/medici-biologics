@@ -33,7 +33,7 @@ export function MindStrap() {
             key={p.name}
             className="mind-strap-item"
             style={{
-              padding: "64px 48px",
+              padding: "clamp(44px, 6vw, 64px) clamp(20px, 5vw, 48px)",
               borderRight: i < 2 ? "1px solid rgba(247, 247, 243, 0.07)" : "none",
               position: "relative",
             }}
@@ -103,7 +103,7 @@ export function MindStrap() {
           .mind-strap-item {
             border-right: none !important;
             border-bottom: 1px solid rgba(247, 247, 243, 0.07) !important;
-            padding: 40px 24px !important;
+            padding: clamp(32px, 6vw, 48px) clamp(20px, 5vw, 40px) !important;
           }
         }
       `}</style>

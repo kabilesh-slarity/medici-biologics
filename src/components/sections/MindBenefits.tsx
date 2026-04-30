@@ -33,7 +33,7 @@ export function MindBenefits() {
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "140px 48px",
+          padding: "clamp(72px, 11vw, 140px) clamp(20px, 4vw, 48px)",
           boxSizing: "border-box",
         }}
       >
@@ -99,6 +99,7 @@ export function MindBenefits() {
               }}
             >
               <div
+                className="mind-benefit-num"
                 style={{
                   fontSize: 32,
                   fontWeight: 700,
@@ -112,6 +113,7 @@ export function MindBenefits() {
                 {b.num}
               </div>
               <h3
+                className="mind-benefit-title"
                 style={{
                   fontSize: 22,
                   fontWeight: 600,
@@ -124,6 +126,7 @@ export function MindBenefits() {
                 {b.title}
               </h3>
               <p
+                className="mind-benefit-desc"
                 style={{
                   fontSize: 16,
                   lineHeight: 1.7,
@@ -143,7 +146,18 @@ export function MindBenefits() {
         @media (max-width: 900px) {
           .mind-benefit {
             grid-template-columns: 1fr !important;
-            gap: 10px !important;
+            gap: 8px 0 !important;
+            padding: 28px 0 !important;
+          }
+          .mind-benefit-num {
+            font-size: 22px !important;
+            margin-bottom: 2px;
+          }
+          .mind-benefit-title {
+            font-size: 19px !important;
+          }
+          .mind-benefit-desc {
+            font-size: 15px !important;
           }
         }
       `}</style>

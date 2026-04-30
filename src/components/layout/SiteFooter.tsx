@@ -1,5 +1,7 @@
 "use client";
 
+import { Logo } from "@/components/layout/Logo";
+
 const FOOTER_COLS = [
   {
     label: "Protocols",
@@ -29,124 +31,44 @@ const FOOTER_COLS = [
 const LEGAL = [
   { label: "Privacy", href: "#" },
   { label: "Terms", href: "#" },
-  { label: "HIPAA Notice", href: "#" },
+  { label: "HIPAA", href: "#" },
 ];
 
 const DISCLAIMER =
-  "Medici Mind is a compounded preparation prepared under 503A standards by a licensed compounding pharmacy. These statements have not been evaluated by the FDA. Medici Mind is not intended to diagnose, treat, cure, or prevent any disease. All orders require clinical review and approval. This product is not appropriate for individuals under 18, those who are pregnant or nursing, or those with certain medical conditions.";
+  "Medici Mind is a compounded preparation prepared under 503A standards by a licensed compounding pharmacy. These statements have not been evaluated by the FDA. Not intended to diagnose, treat, cure, or prevent any disease. All orders require clinical review and approval.";
 
 export function SiteFooter() {
   return (
-    <footer style={{ background: "#000000", color: "rgba(247, 247, 243, 0.6)", paddingBottom: 40 }}>
+    <footer style={{ background: "#000000", color: "rgba(247, 247, 243, 0.6)" }}>
       <div
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "80px 48px 0",
+          padding: "clamp(44px, 7vw, 80px) clamp(20px, 4vw, 48px) 0",
           boxSizing: "border-box",
         }}
       >
-        {/* Top grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr 1fr 1fr",
-            gap: 48,
-            paddingBottom: 56,
-            borderBottom: "1px solid rgba(247, 247, 243, 0.07)",
-          }}
-          className="footer-grid"
-        >
-          {/* Brand */}
-          <div>
-            <div style={{ marginBottom: 18 }}>
-              <span
-                style={{
-                  fontWeight: 700,
-                  fontSize: 20,
-                  letterSpacing: "-0.02em",
-                  color: "#F7F7F3",
-                  textTransform: "lowercase",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  lineHeight: 1,
-                }}
-              >
-                medi
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: 6,
-                    height: 6,
-                    background: "#1ECD92",
-                    borderRadius: "50%",
-                    margin: "0 1px",
-                    transform: "translateY(-3px)",
-                  }}
-                />
-                ci
-              </span>
-              <span
-                style={{
-                  display: "block",
-                  fontWeight: 600,
-                  fontSize: 9,
-                  letterSpacing: "0.4em",
-                  color: "rgba(247, 247, 243, 0.55)",
-                  textTransform: "uppercase",
-                  marginTop: 4,
-                }}
-              >
-                Peptides
-              </span>
-            </div>
-            <p
-              style={{
-                fontSize: 14,
-                lineHeight: 1.65,
-                color: "rgba(247, 247, 243, 0.45)",
-                maxWidth: 300,
-                fontWeight: 400,
-              }}
-            >
-              Building the world&rsquo;s healthiest community. Medici Peptides is the AI-first peptide
-              platform from the team behind Medici.
+        {/* Top grid: brand + link columns */}
+        <div className="footer-grid">
+          {/* Brand column */}
+          <div className="footer-brand">
+            <Logo className="footer-logo" width={72} height={36} style={{ marginBottom: 12 }} />
+            <p className="footer-tagline">
+              Building the world&rsquo;s healthiest community. The AI-first peptide platform from
+              the team behind Medici.
             </p>
           </div>
 
           {/* Link columns */}
           {FOOTER_COLS.map((col) => (
             <div key={col.label}>
-              <h4
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "rgba(247, 247, 243, 0.35)",
-                  marginBottom: 20,
-                  fontWeight: 600,
-                }}
-              >
-                {col.label}
-              </h4>
+              <h4 className="footer-col-label">{col.label}</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {col.links.map((l) => (
-                  <li key={l.label} style={{ marginBottom: 12 }}>
+                  <li key={l.label} style={{ marginBottom: 10 }}>
                     <a
                       href={l.href}
-                      style={{
-                        color: "rgba(247, 247, 243, 0.58)",
-                        textDecoration: "none",
-                        fontSize: 14,
-                        fontWeight: 400,
-                        transition: "color 0.18s ease",
-                      }}
-                      onMouseEnter={(e) =>
-                        ((e.target as HTMLElement).style.color = "#F7F7F3")
-                      }
-                      onMouseLeave={(e) =>
-                        ((e.target as HTMLElement).style.color = "rgba(247, 247, 243, 0.58)")
-                      }
+                      className="footer-link"
                     >
                       {l.label}
                     </a>
@@ -157,63 +79,162 @@ export function SiteFooter() {
           ))}
         </div>
 
-        {/* Disclaimer */}
-        <p
-          style={{
-            marginTop: 32,
-            fontSize: 11,
-            lineHeight: 1.72,
-            color: "rgba(247, 247, 243, 0.3)",
-            fontWeight: 400,
-            maxWidth: 880,
-          }}
-        >
-          {DISCLAIMER}
-        </p>
-
-        {/* Bottom */}
+        {/* Divider */}
         <div
           style={{
-            paddingTop: 28,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 16,
+            height: 1,
+            background: "rgba(247, 247, 243, 0.07)",
+            margin: "clamp(28px, 4vw, 48px) 0 0",
           }}
-        >
-          <span style={{ fontSize: 12, color: "rgba(247, 247, 243, 0.32)" }}>
-            &copy; 2026 Medici Peptides. All rights reserved.
-          </span>
-          <div style={{ display: "flex", gap: 20 }}>
-            {LEGAL.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                style={{
-                  fontSize: 12,
-                  color: "rgba(247, 247, 243, 0.32)",
-                  textDecoration: "none",
-                  transition: "color 0.18s ease",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLElement).style.color = "rgba(247, 247, 243, 0.65)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLElement).style.color = "rgba(247, 247, 243, 0.32)")
-                }
-              >
-                {l.label}
-              </a>
-            ))}
+        />
+
+        {/* Bottom */}
+        <div className="footer-bottom">
+          <p className="footer-disclaimer">{DISCLAIMER}</p>
+          <div className="footer-legal-row">
+            <span style={{ fontSize: 12, color: "rgba(247, 247, 243, 0.3)" }}>
+              &copy; 2026 Medici Peptides
+            </span>
+            <div style={{ display: "flex", gap: 16 }}>
+              {LEGAL.map((l) => (
+                <a key={l.label} href={l.href} className="footer-legal-link">
+                  {l.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <style>{`
+        /* Shared */
+        .footer-logo .logo-wordmark { font-size: 18px; }
+        .footer-logo .logo-dot { width: 5px; height: 5px; margin-top: 2px; }
+        .footer-logo .logo-sub { font-size: 7.5px; }
+
+        .footer-col-label {
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(247, 247, 243, 0.32);
+          margin-bottom: 14px;
+          font-weight: 600;
+        }
+        .footer-link {
+          color: rgba(247, 247, 243, 0.55);
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 400;
+          transition: color 0.18s ease;
+        }
+        .footer-link:hover { color: #F7F7F3; }
+
+        .footer-bottom {
+          padding: 24px 0 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .footer-disclaimer {
+          font-size: 11px;
+          line-height: 1.7;
+          color: rgba(247, 247, 243, 0.28);
+          font-weight: 400;
+          max-width: 820px;
+        }
+        .footer-legal-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .footer-legal-link {
+          font-size: 12px;
+          color: rgba(247, 247, 243, 0.3);
+          text-decoration: none;
+          transition: color 0.18s ease;
+        }
+        .footer-legal-link:hover { color: rgba(247, 247, 243, 0.65); }
+
+        /* Desktop */
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
+          gap: 48px;
+        }
+        .footer-brand { max-width: none; }
+        .footer-tagline {
+          font-size: 14px;
+          line-height: 1.65;
+          color: rgba(247, 247, 243, 0.42);
+          font-weight: 400;
+          max-width: 280px;
+        }
+
+        /* Tablet */
         @media (max-width: 900px) {
           .footer-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr 1fr 1fr;
+          }
+          .footer-brand {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(247, 247, 243, 0.06);
+          }
+          .footer-logo { margin-bottom: 0 !important; }
+          .footer-tagline {
+            font-size: 13px;
+            max-width: none;
+            flex: 1;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 560px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0 12px;
+          }
+          /* Brand spans full width, compact row */
+          .footer-brand {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 12px;
+            padding-bottom: 20px;
+            margin-bottom: 4px;
+            flex-wrap: nowrap;
+          }
+          .footer-logo { margin-bottom: 0 !important; }
+          .footer-tagline {
+            font-size: 12px;
+            line-height: 1.55;
+            color: rgba(247, 247, 243, 0.35) !important;
+          }
+          /* Link columns: all three side-by-side, smaller text */
+          .footer-col-label {
+            font-size: 9px;
+            margin-bottom: 10px;
+          }
+          .footer-link {
+            font-size: 12.5px;
+          }
+          /* Tighter bottom */
+          .footer-bottom {
+            padding: 20px 0 24px;
+            gap: 12px;
+          }
+          .footer-disclaimer {
+            font-size: 10.5px;
+            line-height: 1.65;
+          }
+          .footer-legal-row {
+            flex-direction: row;
+            justify-content: space-between;
           }
         }
       `}</style>

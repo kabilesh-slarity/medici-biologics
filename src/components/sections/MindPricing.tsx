@@ -42,7 +42,7 @@ export function MindPricing() {
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "140px 48px",
+          padding: "clamp(72px, 11vw, 140px) clamp(20px, 4vw, 48px)",
           boxSizing: "border-box",
         }}
       >
@@ -150,6 +150,7 @@ export function MindPricing() {
                 $
               </span>
               <span
+                className="mind-price-amount"
                 style={{
                   fontSize: 80,
                   fontWeight: 700,
@@ -294,6 +295,7 @@ export function MindPricing() {
                 $
               </span>
               <span
+                className="mind-price-amount"
                 style={{
                   fontSize: 80,
                   fontWeight: 700,
@@ -389,6 +391,12 @@ export function MindPricing() {
         @media (max-width: 720px) {
           .mind-pricing-grid {
             grid-template-columns: 1fr !important;
+          }
+          .mind-price-card {
+            padding: 36px 28px !important;
+          }
+          .mind-price-amount {
+            font-size: 64px !important;
           }
         }
       `}</style>

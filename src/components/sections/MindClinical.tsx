@@ -5,7 +5,7 @@ export function MindClinical() {
         style={{
           maxWidth: 1280,
           margin: "0 auto",
-          padding: "140px 48px",
+          padding: "clamp(72px, 11vw, 140px) clamp(20px, 4vw, 48px)",
           boxSizing: "border-box",
         }}
       >
@@ -124,7 +124,7 @@ export function MindClinical() {
         @media (max-width: 900px) {
           .mind-clinical-grid {
             grid-template-columns: 1fr !important;
-            gap: 40px !important;
+            gap: clamp(28px, 5vw, 48px) !important;
           }
         }
       `}</style>
